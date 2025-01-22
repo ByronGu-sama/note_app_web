@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+/src/simulation
+/src/assets/test_pics
 
 # Editor directories and files
 .vscode/*

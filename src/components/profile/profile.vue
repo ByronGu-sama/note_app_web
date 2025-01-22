@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
+import notes from "../../simulation/notes.ts"
+import noteCard from "../miniComponents/noteCard.vue";
 
 let user = ref({
   avatar: "/src/assets/pics/avatar.jpeg",
@@ -15,6 +17,7 @@ let user = ref({
 <template>
 <div class="profile">
   <div class="profile-header">
+    <img src="/src/assets/pics/banner.jpeg" alt="" class="profile-banner"/>
     <div class="profile-user-info">
       <div class="profile-user-info-avatar">
         <el-avatar
@@ -57,7 +60,15 @@ let user = ref({
     </div>
   </div>
   <div class="profile-body">
-    <div style="width: 100%;height: 500px; background-color: #303133"></div>
+    <div v-for="i in notes" key="i" class="note-body">
+      <noteCard
+          :authorAvatar="i.author_avatar"
+          :author="i.author_name"
+          :cover="i.cover"
+          :likes="i.likes"
+          :title="i.title"
+      ></noteCard>
+    </div>
   </div>
 </div>
 </template>

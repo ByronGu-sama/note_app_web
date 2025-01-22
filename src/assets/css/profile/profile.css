@@ -11,6 +11,13 @@ body {
     width: 100%;
     height: 50%;
     position: relative;
+    overflow: hidden;
+}
+.profile-banner {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 .profile-user-info {
     width: 100%;
@@ -18,6 +25,7 @@ body {
     position: absolute;
     bottom: 0;
     left: 0;
+    background: linear-gradient(transparent, #000000 38%, #ffffff 38%);
 }
 .profile-user-info-avatar {
     width: 50%;
@@ -27,7 +35,7 @@ body {
     left: 0;
 }
 .profile-username-area {
-    width: 195px;
+    width: 105px;
     overflow: hidden;
     height: 40px;
     position: absolute;
@@ -35,7 +43,8 @@ body {
     left: 105px;
     font-size: 18px;
     line-height: 40px;
-    color: #303133;
+    color: rgba(245, 242, 242);
+    text-shadow: 0 0 10px #ffffff;
 }
 .profile-user-signature-area {
     width: calc(100% - 105px);
@@ -46,21 +55,22 @@ body {
     position: absolute;
     top: 55px;
     left: 105px;
-    color: #606266;
+    color: #303133;
 }
 .profile-edit {
-    width: 80px;
+    width: 60px;
     height: 30px;
-    border: 1px solid #606266;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: absolute;
     top: 20px;
-    left: 310px;
+    left: 222px;
     border-radius: 15px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 30px;
-    color: #303133;
+    color: #f2f2ff;
     cursor: pointer;
+    text-shadow: 0 0 10px #ffffff;
 }
 .profile-user-relation {
     position: absolute;
@@ -77,11 +87,11 @@ body {
 }
 .profile-user-relation-title {
     font-size: 13px;
-    color: #606266;
+    color: #303133;
 }
 .profile-user-relation-body {
     font-size: 14px;
-    color: #606266;
+    color: #303133;
 }
 .profile-profile-setting {
     width: 50%;
@@ -101,4 +111,9 @@ body {
 .profile-body {
     width: 100%;
     height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
