@@ -1,12 +1,6 @@
 <script setup lang="ts">
-interface Props {
-  title: string; // 标题
-  cover: string; // 封面
-  author: string; // 作者
-  authorAvatar: string; // 作者头像
-  likes: number; // 点赞数
-}
-let props = defineProps<Props>();
+import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
+let props = defineProps<ISurfaceNote>();
 </script>
 
 <template>

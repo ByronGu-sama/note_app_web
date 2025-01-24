@@ -2,23 +2,45 @@ import {createWebHashHistory, createRouter} from "vue-router";
 const routes:any[] = [
     {
         path: "/",
-        name: "Home",
-        component: () => import ('../components/home/home.vue')
+        name: "Main",
+        component: () => import ('../components/main.vue'),
+        children: [
+            {
+                path: "/home",
+                name: "Home",
+                component: () => import ('../components/home/home.vue')
+            },
+            {
+                path: "/video",
+                name: "Video",
+                component: () => import ('../components/video/video.vue')
+            },
+            {
+                path: "/message",
+                name: "Message",
+                component: () => import ('../components/message/message.vue')
+            },
+            {
+                path: "/profile",
+                name: "Profile",
+                component: () => import ('../components/profile/profile.vue')
+            },
+        ]
     },
     {
-        path: "/video",
-        name: "Video",
-        component: () => import ('../components/video/video.vue')
+        path: "/startup",
+        name: "Startup",
+        component: () => import ('../components/startup.vue')
     },
     {
-        path: "/message",
-        name: "Message",
-        component: () => import ('../components/message/message.vue')
+        path: "/login",
+        name: "Login",
+        component: () => import ('../components/login.vue')
     },
     {
-        path: "/profile",
-        name: "Profile",
-        component: () => import ('../components/profile/profile.vue')
+        path: "/register",
+        name: "Register",
+        component: () => import ('../components/register.vue')
     },
 ]
 
