@@ -1,5 +1,14 @@
 <script setup lang="ts">
+import {useUserStore} from "../store/userStore.ts";
+import router from "../router";
+const userStore = useUserStore();
 
+const token = localStorage.getItem('token');
+if (token == null || token == "") {
+  router.push("/startup")
+} else {
+  userStore.getUserInfo()
+}
 </script>
 
 <template>
@@ -22,9 +31,11 @@
         <span>视频</span>
       </div>
     </router-link>
-    <div class="add">
-      <img src="/src/assets/icons/add.png" alt="add"/>
-    </div>
+    <router-link to="/newNote" class="router-link-active">
+      <div class="add">
+        <img src="/src/assets/icons/add.png" alt="add"/>
+      </div>
+    </router-link>
     <router-link to="/message" class="router-link-active">
       <div class="nav-btn">
         <img src="/src/assets/icons/msg1.png" alt="msg"/>

@@ -13,7 +13,7 @@ const toRegister = () => {
 <template>
 <div class="start-up">
   <div class="start-up-header">
-    <video src="/src/assets/videos/startup.mp4" autoplay loop></video>
+    <video src="/src/assets/videos/startup.mp4" autoplay></video>
     <button class="start-up-btn" @click="toLogin">登陆</button>
     <button class="start-up-btn" @click="toRegister">注册</button>
   </div>

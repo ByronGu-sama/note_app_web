@@ -1,0 +1,16 @@
+export interface IUserInfo {
+    uid?: number,
+    username?: string,
+    avatarUrl?: string,
+    age?: number,
+    birth?: string,
+    gender?: number,
+    signature?: string,
+    address?: string,
+    language?: string,
+    collects?: number,
+    follows?: number,
+    followers?: number,
+    likes?: number,
+    noteCount?: number,
+}

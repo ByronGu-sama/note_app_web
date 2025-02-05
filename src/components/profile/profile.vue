@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive} from "vue";
 import notes from "../../simulation/notes.ts"
 import noteCard from "../miniComponents/noteCard.vue";
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
+import {useUserStore} from "../../store/userStore.ts";
+import type {IUserInfo} from "../../models/userInfoModel.ts";
 
-let user = ref({
-  avatar: "/src/assets/pics/avatar.jpeg",
-  nickname: "hachiware",
-  signature: "这是一条签名",
-  follows: 11,
-  followers: 20,
-  likes: 10,
-  banner: "src/assets/pics/banner.jpeg",
-});
+const userStore = useUserStore();
+
+let user:IUserInfo | null = userStore.userInfo
 
 interface gridArrItem {
   id: number;
@@ -74,12 +70,12 @@ onMounted(() => {
             style="margin: 15px 0 0 15px"
             fit="cover"
             :size="80"
-            :src="user.avatar"/>
+            :src="user?.avatarUrl"/>
         <div class="profile-username-area">
-          <span>{{user.nickname}}</span>
+          <span>{{user?.username}}</span>
         </div>
         <div class="profile-user-signature-area">
-          <span>{{user.signature}}</span>
+          <span>{{user?.signature ? user.signature:"还没有简介哦"}}</span>
         </div>
         <div class="profile-edit">
           编辑资料
@@ -88,17 +84,17 @@ onMounted(() => {
           <div>
             <span class="profile-user-relation-title">关注</span>
             <br>
-            <span class="profile-user-relation-body">{{user.follows}}</span>
+            <span class="profile-user-relation-body">{{user?.follows}}</span>
           </div>
           <div>
             <span class="profile-user-relation-title">被关注</span>
             <br>
-            <span class="profile-user-relation-body">{{user.followers}}</span>
+            <span class="profile-user-relation-body">{{user?.followers}}</span>
           </div>
           <div>
             <span class="profile-user-relation-title">喜欢&收藏</span>
             <br>
-            <span class="profile-user-relation-body">{{user.likes}}</span>
+            <span class="profile-user-relation-body">{{user?.likes}}</span>
           </div>
         </div>
         <img src="/src/assets/icons/setting.png" class="profile-profile-setting-icon" alt="setting"/>

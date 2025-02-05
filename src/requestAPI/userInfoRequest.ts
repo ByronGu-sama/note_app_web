@@ -1,0 +1,17 @@
+export default {
+    LOGIN: "/auth/login",
+    REGISTER: "/auth/register",
+    LOGOUT: "/auth/logout",
+    GET_USER_INFO: "/userInfo",
+    UPDATE_USER_INFO: "/userInfo/update",
+    UPLOAD_AVATAR: "/avatar/upload",
+    CHANGE_AVATAR: "/avatar/change",
+    NEW_NOTE: "/note",
+    DEL_NOTE: "/note",
+    NOTE_LIST: "/note/list",
+    MY_NOTE_LIST: "/note/myNotes",
+    LIKE_NOTE: "/note/like",
+    DISLIKE_NOTE: "/note/dislike",
+    COLLECT_NOTE: "/note/collect",
+    CANCEL_COLLECT_NOTE: "/note/cancelCollect",
+}
