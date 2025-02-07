@@ -14,7 +14,12 @@ if (token == null || token == "") {
 <template>
 <div class="main">
   <div class="header">
-    <router-view/>
+    <router-view v-slot="{Component}">
+      <keep-alive>
+        <component :is="Component" :key="$route.name" v-if="$route.meta.keepAlive" ></component>
+      </keep-alive>
+      <component :is="Component" :key="$route.name" v-if="!$route.meta.keepAlive" ></component>
+    </router-view>
   </div>
   <div class="nav">
     <router-link to="/home" class="router-link-active">

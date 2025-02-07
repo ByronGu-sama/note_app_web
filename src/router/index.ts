@@ -8,7 +8,10 @@ const routes:any[] = [
             {
                 path: "home",
                 name: "Home",
-                component: () => import ('../components/home/home.vue')
+                component: () => import ('../components/home/home.vue'),
+                meta: {
+                    keepAlive: true
+                }
             },
             {
                 path: "video",
@@ -18,17 +21,23 @@ const routes:any[] = [
             {
                 path: "newNote",
                 name: "newNote",
-                component: () => import ('../components/newNote/newNote.vue')
+                component: () => import ('../components/newNote/newNote.vue'),
             },
             {
                 path: "message",
                 name: "Message",
-                component: () => import ('../components/message/message.vue')
+                component: () => import ('../components/message/message.vue'),
+                meta: {
+                    keepAlive: true
+                }
             },
             {
                 path: "profile",
                 name: "Profile",
-                component: () => import ('../components/profile/profile.vue')
+                component: () => import ('../components/profile/profile.vue'),
+                meta: {
+                    keepAlive: true
+                }
             },
         ]
     },

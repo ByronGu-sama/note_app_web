@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import {onMounted, reactive} from "vue";
-import notes from "../../simulation/notes.ts"
 import noteCard from "../miniComponents/noteCard.vue";
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
 import {useUserStore} from "../../store/userStore.ts";
 import type {IUserInfo} from "../../models/userInfoModel.ts";
+import axios from "axios";
+import requestList from "../../requestAPI/requestList.ts";
+import {ElMessage} from "element-plus";
 
 const userStore = useUserStore();
-
-let user:IUserInfo | null = userStore.userInfo
+let user:IUserInfo | null = userStore.userInfo;
 
 interface gridArrItem {
   id: number;
@@ -38,9 +39,9 @@ let gridArr = reactive<gridArrItem[]>([
     }
 ]);
 
-const pushToArrByImgHeight = (notesArr:any) => {
+const pushToArrByImgHeight = (notesArr:ISurfaceNote) => {
   if (notesArr.length == 0) {
-    return
+    return;
   }
   for (let i of notesArr) {
     let minHeightIndex = 0;
@@ -49,13 +50,31 @@ const pushToArrByImgHeight = (notesArr:any) => {
         minHeightIndex = j;
       }
     }
-    gridArr[minHeightIndex].data.push(i)
-    gridArr[minHeightIndex].height += i.coverHeight;
+    gridArr[minHeightIndex].data.push(i);
+    gridArr[minHeightIndex].height += i.cover_height;
   }
 }
 
+const getUserNotes = () => {
+  axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=10").then((res) => {
+    if(res.data.code === 200) {
+      pushToArrByImgHeight(res.data.data);
+    } else {
+      ElMessage({
+        type: "error",
+        message: res.data.message,
+      });
+    }
+  }).catch(() => {
+    ElMessage({
+      type: "error",
+      message: "获取笔记失败",
+    });
+  });
+}
+
 onMounted(() => {
-  pushToArrByImgHeight(notes);
+  getUserNotes();
 })
 </script>
 
@@ -104,47 +123,49 @@ onMounted(() => {
   <div class="profile-body">
     <div class="note-body">
       <noteCard
-          v-for="i in  gridArr[0].data" key="i"
-          :authorAvatar="i.authorAvatar"
-          :author="i.author"
+          v-for="i in gridArr[0].data" key="i"
+          :avatarUrl="i.avatarUrl"
+          :username="i.username"
           :cover="i.cover"
-          :likes="i.likes"
+          :likesCount="i.likesCount"
           :title="i.title"
+          :cover_height="i.cover_height"
+          :nid="i.nid"
       ></noteCard>
     </div>
     <div class="note-body">
       <noteCard
           v-for="i in gridArr[1].data" key="i"
-          :authorAvatar="i.authorAvatar"
-          :author="i.author"
+          :avatarUrl="i.avatarUrl"
+          :username="i.username"
           :cover="i.cover"
-          :likes="i.likes"
+          :likesCount="i.likesCount"
           :title="i.title"
-          :cover-height="i.coverHeight"
+          :cover_height="i.cover_height"
           :nid="i.nid"
       ></noteCard>
     </div>
     <div class="note-body">
       <noteCard
           v-for="i in gridArr[2].data" key="i"
-          :authorAvatar="i.authorAvatar"
-          :author="i.author"
+          :avatarUrl="i.avatarUrl"
+          :username="i.username"
           :cover="i.cover"
-          :likes="i.likes"
+          :likesCount="i.likesCount"
           :title="i.title"
-          :cover-height="i.coverHeight"
+          :cover_height="i.cover_height"
           :nid="i.nid"
       ></noteCard>
     </div>
     <div class="note-body">
       <noteCard
           v-for="i in gridArr[3].data" key="i"
-          :authorAvatar="i.authorAvatar"
-          :author="i.author"
+          :avatarUrl="i.avatarUrl"
+          :username="i.username"
           :cover="i.cover"
-          :likes="i.likes"
+          :likesCount="i.likesCount"
           :title="i.title"
-          :cover-height="i.coverHeight"
+          :cover_height="i.cover_height"
           :nid="i.nid"
       ></noteCard>
     </div>

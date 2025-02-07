@@ -13,10 +13,10 @@ let props = defineProps<ISurfaceNote>();
         <span>{{props.title}}</span>
       </div>
       <div class="note-card-content-author">
-        <img :src="props.authorAvatar" alt="" v-if="props.authorAvatar" class="note-card-author-avatar"/>
-        <span class="note-card-content-authorName">{{props.author}}</span>
-        <img src="/src/assets/icons/like.png" class="note-card-like-icon"/>
-        <span class="note-card-likes">{{props.likes}}</span>
+        <img :src="props.avatarUrl" alt="" v-if="props.avatarUrl" class="note-card-author-avatar"/>
+        <span class="note-card-content-authorName">{{props.username}}</span>
+        <img src="/src/assets/icons/like.png" class="note-card-like-icon" alt=""/>
+        <span class="note-card-likes">{{props.likesCount}}</span>
       </div>
     </div>
   </div>

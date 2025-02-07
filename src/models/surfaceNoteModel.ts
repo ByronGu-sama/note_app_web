@@ -1,9 +1,13 @@
 export interface ISurfaceNote {
-    title?: string; // 标题
+    nid?: string; // 笔记id
+    uid?: bigint; // 作者id
+    username?: string; // 作者名
+    avatarUrl?: string; // 作者头像
     cover?: string; // 封面
-    coverHeight?: number; // 封面高度
-    nid?: number;
-    author?: string; // 作者
-    authorAvatar?: string; // 作者头像
-    likes?: number; // 点赞数
+    cover_height?: number; // 封面高度
+    title?: string; // 标题
+    public?: number; // 是否公开
+    categoryId?: string; // 分类
+    tags?: string; // 标签
+    likesCount?: number; // 点赞数
 }

@@ -3,7 +3,7 @@ import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import axios from "axios";
 import router from "../router";
-import loginAndRegister from "../requestAPI/userInfoRequest.ts";
+import loginAndRegister from "../requestAPI/requestList.ts";
 
 const phoneReg:RegExp = /(^1\d{10}$)|(^[0-9]\d{7}$)/;
 const pwdReg:RegExp = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_+~`\-={}|[\]\\:";'<>?,./]{8,}$/

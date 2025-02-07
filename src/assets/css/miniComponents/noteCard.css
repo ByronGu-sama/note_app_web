@@ -3,7 +3,7 @@
     height: auto;
     background-color: #f8f8f8;
     margin-top: 20px;
-    border-radius: 15px;
+    border-radius: 20px;
     cursor: pointer;
     overflow: hidden;
     position: relative;
@@ -37,21 +37,21 @@
 }
 .note-card-content-author {
     width: 100%;
-    height: 60px;
+    height: 50px;
     position: relative;
 }
 .note-card-author-avatar {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     border-radius: 20px;
     position: absolute;
-    top: 7px;
+    bottom: 7px;
     left: 7px;
 }
 .note-card-content-authorName {
     position: absolute;
-    left: 48px;
-    top: 14px;
+    left: 42px;
+    bottom: 13px;
     font-size: 13px;
     color: #242424;
 }
@@ -60,12 +60,12 @@
     height: 20px;
     position: absolute;
     right: 30px;
-    top: 13px;
+    bottom: 13px;
 }
 .note-card-likes {
     color: #242424;
     font-size: 12px;
     position: absolute;
-    right: 6px;
-    top: 14px;
+    right: 20px;
+    bottom: 14px;
 }
