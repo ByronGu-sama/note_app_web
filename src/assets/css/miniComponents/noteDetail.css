@@ -1,0 +1,91 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+.note-detail {
+    will-change: opacity;
+    position: absolute;
+    z-index: 999;
+    overflow: hidden;
+    transition: opacity linear 0.2s;
+    background-color: white;
+}
+.note-detail-exit-icon {
+    position: absolute;
+    top: 8px;
+    left: 5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.note-detail-exit-icon > img {
+    width: 30px;
+    height: 30px;
+}
+.note-detail {
+    display: flex;
+}
+.note-detail-left {
+    flex: 65%;
+    display: flex;
+    align-items: center;
+}
+.note-detail-carousel {
+    width: 100%;
+    height: auto;
+}
+.note-detail-right {
+    flex: 35%;
+}
+.note-detail-right-top-area {
+    width: 100%;
+    height: auto;
+    color: #303133;
+}
+.note-detail-right-top-user-area {
+    width: 100%;
+    height: 70px;
+    position: relative;
+}
+.note-detail-right-top-user-area span {
+    position: absolute;
+    left: 70px;
+    top: 21px;
+    font-size: 17px;
+    font-weight: bold;
+}
+.note-detail-right-top-user-area button{
+    width: 60px;
+    height: 30px;
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    border-radius: 15px;
+    border: none;
+    font-size: 12px;
+    color: #303133;
+    font-weight: bold;
+}
+.note-detail-right-bottom-area {
+    width: 100%;
+}
+.note-detail-right-bottom-detail-area {
+    width: 100%;
+    background-color: white;
+}
+.note-detail-right-bottom-detail-area-title {
+    color: #242424;
+    font-size: 18px;
+    box-sizing: border-box;
+    padding: 5px 7px 5px 7px;
+}
+.note-detail-right-bottom-detail-area-content {
+    color: #303133;
+    font-size: 16px;
+    box-sizing: border-box;
+    padding: 5px 7px 5px 7px;
+}
+.note-detail-right-bottom-comments-area {
+    width: 100%;
+
+}

@@ -1,0 +1,59 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+.comment-card {
+    width: 100%;
+    margin-top: 10px;
+    position: relative;
+}
+.comment-card-userInfo {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    color: #303133;
+}
+.comment-card-userInfo-left {
+    width: calc(100% - 50px);
+    height: 50px;
+    position: relative;
+}
+.comment-card-userInfo-right {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: #303133;
+}
+.comment-card-userInfo-right img {
+    width: 26px;
+    height: 26px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+.comment-card-userInfo-right span {
+    font-size: 12px;
+}
+.comment-card-username {
+    position: absolute;
+    top: 12px;
+    left: 50px;
+    font-size: 15px;
+}
+.comment-card-comment {
+    width: 100%;
+    height: calc(100% - 80px);
+    box-sizing: border-box;
+    padding: 5px;
+    font-size: 15px;
+    color: #303133;
+}
+.comment-card-bottom {
+    width: 100%;
+    height: 30px;
+    font-size: 13px;
+    line-height: 30px;
+    text-indent: 5px;
+    color: #606266;
+}

@@ -83,9 +83,9 @@ const handleUpload = (_:any, itemList:any) => {
     </el-upload>
   </div>
   <div class="newNote-content-area">
-    <input placeholder="写下你的标题吧" class="newNote-content-title" v-model="title" />
+    <input placeholder="写下你的标题吧" class="newNote-content-title" v-model="title" maxlength="30"/>
     <br>
-    <textarea placeholder="写点什么呢？" class="newNote-content-body" v-model="content"></textarea>
+    <textarea placeholder="写点什么呢？" class="newNote-content-body" v-model="content" maxlength="300"></textarea>
   </div>
   <div class="newNote-btn-area">
     <button class="submit-btn">删除</button>

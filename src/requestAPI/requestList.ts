@@ -13,9 +13,11 @@ export default {
     UPLOAD_AVATAR: "/avatar/upload",
     // 更新用户头像
     CHANGE_AVATAR: "/avatar/change",
-    // 创建笔记
+    // post 创建笔记
     NEW_NOTE: "/note",
-    // 删除笔记
+    // post 获取笔记详情
+    GET_NOTE_DETAIL: "/note",
+    // delete 删除笔记
     DEL_NOTE: "/note",
     // 获取笔记列表
     NOTE_LIST: "/note/list",

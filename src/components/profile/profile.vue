@@ -56,7 +56,7 @@ const pushToArrByImgHeight = (notesArr:ISurfaceNote) => {
 }
 
 const getUserNotes = () => {
-  axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=10").then((res) => {
+  axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=1").then((res) => {
     if(res.data.code === 200) {
       pushToArrByImgHeight(res.data.data);
     } else {
@@ -120,7 +120,9 @@ onMounted(() => {
       </div>
     </div>
   </div>
+
   <div class="profile-body">
+<!--    1-->
     <div class="note-body">
       <noteCard
           v-for="i in gridArr[0].data" key="i"
@@ -133,6 +135,7 @@ onMounted(() => {
           :nid="i.nid"
       ></noteCard>
     </div>
+<!--    2-->
     <div class="note-body">
       <noteCard
           v-for="i in gridArr[1].data" key="i"
@@ -145,6 +148,7 @@ onMounted(() => {
           :nid="i.nid"
       ></noteCard>
     </div>
+<!--    3-->
     <div class="note-body">
       <noteCard
           v-for="i in gridArr[2].data" key="i"
@@ -157,6 +161,7 @@ onMounted(() => {
           :nid="i.nid"
       ></noteCard>
     </div>
+<!--    4-->
     <div class="note-body">
       <noteCard
           v-for="i in gridArr[3].data" key="i"
@@ -169,6 +174,7 @@ onMounted(() => {
           :nid="i.nid"
       ></noteCard>
     </div>
+
   </div>
 </div>
 </template>
