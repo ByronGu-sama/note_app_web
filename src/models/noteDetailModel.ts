@@ -8,7 +8,7 @@ export interface INoteDetailModel {
     content:string;
     createdAt:string;
     updatedAt:string;
-    public: int;
+    public: number;
     categoryId:string;
     tags: string;
     likesCount:number;

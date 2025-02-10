@@ -33,4 +33,14 @@ export default {
     COLLECT_NOTE: "/note/collect",
     // 取消收藏笔记
     CANCEL_COLLECT_NOTE: "/note/cancelCollect",
+    // 评论笔记
+    NEW_NOTE_COMMENT: "/comment",
+    // 获取笔记评论列表
+    GET_NOTE_COMMENT_LIST: "/comment/getList",
+    // 删除笔记评论
+    DEl_NOTE_COMMENT: "/comment/delComment",
+    // 点赞评论
+    LIKE_NOTE_COMMENT: "/comment/like",
+    // 取消点赞评论
+    DISLIKE_NOTE_COMMENT: "/comment/dislike",
 }

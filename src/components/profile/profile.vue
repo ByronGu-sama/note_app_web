@@ -3,13 +3,11 @@ import {onMounted, reactive} from "vue";
 import noteCard from "../miniComponents/noteCard.vue";
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
 import {useUserStore} from "../../store/userStore.ts";
-import type {IUserInfo} from "../../models/userInfoModel.ts";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
 import {ElMessage} from "element-plus";
 
 const userStore = useUserStore();
-let user:IUserInfo | null = userStore.userInfo;
 
 interface gridArrItem {
   id: number;
@@ -39,7 +37,7 @@ let gridArr = reactive<gridArrItem[]>([
     }
 ]);
 
-const pushToArrByImgHeight = (notesArr:ISurfaceNote) => {
+const pushToArrByImgHeight = (notesArr:ISurfaceNote[]) => {
   if (notesArr.length == 0) {
     return;
   }
@@ -51,12 +49,12 @@ const pushToArrByImgHeight = (notesArr:ISurfaceNote) => {
       }
     }
     gridArr[minHeightIndex].data.push(i);
-    gridArr[minHeightIndex].height += i.cover_height;
+    gridArr[minHeightIndex].height += i.cover_height!;
   }
 }
 
 const getUserNotes = () => {
-  axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=1").then((res) => {
+  axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=5").then((res) => {
     if(res.data.code === 200) {
       pushToArrByImgHeight(res.data.data);
     } else {
@@ -89,12 +87,12 @@ onMounted(() => {
             style="margin: 15px 0 0 15px"
             fit="cover"
             :size="80"
-            :src="user?.avatarUrl"/>
+            :src="userStore.userInfo?.avatarUrl"/>
         <div class="profile-username-area">
-          <span>{{user?.username}}</span>
+          <span>{{userStore.userInfo?.username ? userStore.userInfo.username : ""}}</span>
         </div>
         <div class="profile-user-signature-area">
-          <span>{{user?.signature ? user.signature:"还没有简介哦"}}</span>
+          <span>{{userStore.userInfo?.signature ? userStore.userInfo.signature:""}}</span>
         </div>
         <div class="profile-edit">
           编辑资料
@@ -103,17 +101,17 @@ onMounted(() => {
           <div>
             <span class="profile-user-relation-title">关注</span>
             <br>
-            <span class="profile-user-relation-body">{{user?.follows}}</span>
+            <span class="profile-user-relation-body">{{userStore.userInfo?.follows ? userStore.userInfo.follows:0}}</span>
           </div>
           <div>
             <span class="profile-user-relation-title">被关注</span>
             <br>
-            <span class="profile-user-relation-body">{{user?.followers}}</span>
+            <span class="profile-user-relation-body">{{userStore.userInfo?.followers ? userStore.userInfo.followers:0}}</span>
           </div>
           <div>
             <span class="profile-user-relation-title">喜欢&收藏</span>
             <br>
-            <span class="profile-user-relation-body">{{user?.likes}}</span>
+            <span class="profile-user-relation-body">{{userStore.userInfo?.likes ? userStore.userInfo.likes:0}}</span>
           </div>
         </div>
         <img src="/src/assets/icons/setting.png" class="profile-profile-setting-icon" alt="setting"/>

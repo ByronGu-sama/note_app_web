@@ -2,21 +2,33 @@
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
 import {convertToShortNumber} from "../../tools/numberTools.ts";
 import {useNoteStore} from "../../store/noteStore.ts";
+import {ElMessage} from "element-plus";
 
 const noteStore = useNoteStore();
 
 let props = defineProps<ISurfaceNote>();
 
 const openNoteCard = () => {
-  noteStore.getNoteDetail(props.nid)
-  noteStore.showNoteDetail = true
+  if (props.nid) {
+    noteStore.noteDetailHasLoaded = false
+    noteStore.noteCommentsHasLoaded = false
+    let nid = props.nid
+    noteStore.getNoteDetail(nid)
+    noteStore.getNoteComment(nid)
+    noteStore.showNoteCard = true
+  } else {
+    ElMessage({
+      type: "warning",
+      message: "出错啦～"
+    })
+  }
 }
 </script>
 
 <template>
   <div class="note-card-area"
        @click="openNoteCard()"
-       v-if="props.avatarUrl !== '' && props.cover !== '' && props.title !== '' && props.username !== '' && props.likesCount !== ''">
+       v-if="props.avatarUrl !== undefined && props.cover !== undefined && props.title !== undefined && props.username !== undefined && props.likesCount !== undefined">
     <div class="note-card-header">
       <img :src="props.cover" alt="" class="note-card-cover"/>
     </div>
