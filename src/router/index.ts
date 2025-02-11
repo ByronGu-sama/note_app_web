@@ -42,19 +42,36 @@ const routes:any[] = [
         ]
     },
     {
+        path: "/updateProfile",
+        name: "UpdateProfile",
+        component: () => import('../components/profile/updateProfileInfo.vue'),
+        meta: {
+            keepAlive: false
+        },
+    },
+    {
         path: "/startup",
         name: "Startup",
-        component: () => import ('../components/startup.vue')
+        component: () => import ('../components/startup.vue'),
+        meta: {
+            keepAlive: false
+        },
     },
     {
         path: "/login",
         name: "Login",
-        component: () => import ('../components/login.vue')
+        component: () => import ('../components/login.vue'),
+        meta: {
+            keepAlive: false
+        },
     },
     {
         path: "/register",
         name: "Register",
-        component: () => import ('../components/register.vue')
+        component: () => import ('../components/register.vue'),
+        meta: {
+            keepAlive: false
+        },
     },
 ]
 

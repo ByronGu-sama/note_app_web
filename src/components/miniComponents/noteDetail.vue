@@ -72,10 +72,6 @@ watch(() => noteStore.noteDetailHasLoaded, (n) => {
     noteStore.closeDetailCard()
   }
 })
-
-onBeforeRouteLeave(() => {
-  noteStore.closeDetailCard()
-})
 </script>
 
 <template>
@@ -117,10 +113,13 @@ onBeforeRouteLeave(() => {
               height="500px">
             <el-carousel-item v-for="(pic,index) in noteStore.noteDetail.pics" :key="index">
               <div class="note-detail-carousel-image-wrapper">
-                <img
+                <el-image
+                    fit="cover"
                     :src="pic"
-                    alt=""
-                    class="note-detail-carousel-image">
+                    :preview-teleported="true"
+                    :preview-src-list="noteStore.noteDetail.pics"
+                    :infinite="false"
+                />
               </div>
             </el-carousel-item>
           </el-carousel>

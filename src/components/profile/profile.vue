@@ -6,7 +6,7 @@ import {useUserStore} from "../../store/userStore.ts";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
 import {ElMessage} from "element-plus";
-import NoteDetail from "../miniComponents/noteDetail.vue";
+import router from "../../router";
 
 const userStore = useUserStore();
 
@@ -72,6 +72,10 @@ const getUserNotes = () => {
   });
 }
 
+const toUpdateProfile = () => {
+  router.push({name: "UpdateProfile"});
+}
+
 onMounted(() => {
   getUserNotes();
 })
@@ -79,8 +83,6 @@ onMounted(() => {
 
 <template>
 <div class="profile">
-  <!--  笔记详情展示卡片-->
-  <note-detail></note-detail>
   <div class="profile-header">
     <img src="/src/assets/pics/banner.jpeg" alt="" class="profile-banner"/>
     <div class="profile-user-info">
@@ -97,7 +99,7 @@ onMounted(() => {
         <div class="profile-user-signature-area">
           <span>{{userStore.userInfo?.signature ? userStore.userInfo.signature:""}}</span>
         </div>
-        <div class="profile-edit">
+        <div class="profile-edit" @click="toUpdateProfile">
           编辑资料
         </div>
         <div class="profile-user-relation">

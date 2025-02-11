@@ -1,11 +1,14 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
-import router from './router'
-import ElementPlus, {ElMessage} from 'element-plus'
-import 'element-plus/dist/index.css'
+import {createApp} from 'vue'
 import axios from "axios";
 import {createPinia} from 'pinia'
+import ElementPlus, {ElMessage} from 'element-plus'
+import App from './App.vue'
+import router from './router'
+import './style.css'
+import 'vue-cropper/next/dist/index.css'
+import 'element-plus/dist/index.css'
+import VueCropper from "vue-cropper/next";
+import {useNoteStore} from "./store/noteStore.ts";
 const pinia = createPinia()
 
 // 默认地址
@@ -51,8 +54,15 @@ if (token) {
     router.push("/startup");
 }
 
+router.afterEach(() => {
+    const noteStore = useNoteStore();
+    noteStore.closeDetailCard();
+});
+
+
 createApp(App)
     .use(router)
     .use(pinia)
     .use(ElementPlus)
+    .use(VueCropper)
     .mount('#app')

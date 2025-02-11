@@ -60,6 +60,8 @@ const replyComment = (parent_name:string) => {
     }
   }).finally(() => {
     showMainReplyArea.value = false;
+    comment.value.content = "";
+    showSubReplyAreaIndex.value = 0
   })
 }
 
