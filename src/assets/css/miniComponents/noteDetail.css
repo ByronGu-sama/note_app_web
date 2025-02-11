@@ -5,6 +5,10 @@ body {
 .note-detail-wrapper {
     width: 900px;
     height: 590px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
 }
 .note-detail {
     width: 900px;
@@ -52,6 +56,8 @@ body {
 }
 .note-detail-right {
     flex: 35%;
+    height: 590px;
+    overflow-y: auto;
 }
 .note-detail-right-top-area {
     width: 100%;
@@ -81,6 +87,28 @@ body {
     font-size: 12px;
     color: #303133;
     font-weight: bold;
+}
+.note-detail-right-middle-area {
+    width: 100%;
+    position: relative;
+    margin-top: 10px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+.note-detail-right-middle-area-input {
+    width: calc(100% - 90px);
+}
+.note-detail-right-middle-area-btn {
+    width: 60px;
+    border: none;
+    height: 30px;
+    border-radius: 15px;
+    position: absolute;
+    right: 20px;
+    font-size: 12px;
+    color: #303133;
+    font-weight: bold;
+    cursor: pointer;
 }
 .note-detail-right-bottom-area {
     width: 100%;

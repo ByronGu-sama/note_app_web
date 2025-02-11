@@ -51,8 +51,6 @@ if (token) {
     router.push("/startup");
 }
 
-
-
 createApp(App)
     .use(router)
     .use(pinia)

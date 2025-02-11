@@ -29,11 +29,11 @@ export const useNoteStore = defineStore('note', () => {
     const noteDetailHasLoaded = ref(false);
     const noteCommentsList = ref<INoteCommentModel[]>([]);
     const noteCommentsHasLoaded = ref(false);
-    const showNoteCard = ref(false);
 
     // 评论分页
-    const limit = 50;
+    const limit = 5;
     let page = 1;
+    let noCommentMark = ref(false);
 
     const getNoteDetail = (nid:string) => {
         noteDetail.value = {
@@ -69,12 +69,19 @@ export const useNoteStore = defineStore('note', () => {
     }
 
     const getNoteComment = (nid:string) => {
+        if(nid === "" || page !== 1 && noCommentMark.value) {
+            return
+        }
         if(page === 1) {
             noteCommentsList.value = [];
+            noCommentMark.value = false
         }
         axios.get(`${requestList.GET_NOTE_COMMENT_LIST}/${nid}?page=${page}&limit=${limit}`).then((res) => {
             if(res.data.code === 200) {
                 page++
+                if(res.data.data.length < limit) {
+                    noCommentMark.value = true
+                }
                 for (let i of res.data.data) {
                     noteCommentsList.value.push(i)
                 }
@@ -104,7 +111,7 @@ export const useNoteStore = defineStore('note', () => {
         noteDetailHasLoaded,
         noteCommentsList,
         noteCommentsHasLoaded,
-        showNoteCard,
+        noCommentMark,
         getNoteDetail,
         getNoteComment,
         closeDetailCard,

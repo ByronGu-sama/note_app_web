@@ -6,6 +6,7 @@ import {useUserStore} from "../../store/userStore.ts";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
 import {ElMessage} from "element-plus";
+import NoteDetail from "../miniComponents/noteDetail.vue";
 
 const userStore = useUserStore();
 
@@ -54,7 +55,7 @@ const pushToArrByImgHeight = (notesArr:ISurfaceNote[]) => {
 }
 
 const getUserNotes = () => {
-  axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=5").then((res) => {
+  axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=1").then((res) => {
     if(res.data.code === 200) {
       pushToArrByImgHeight(res.data.data);
     } else {
@@ -78,6 +79,8 @@ onMounted(() => {
 
 <template>
 <div class="profile">
+  <!--  笔记详情展示卡片-->
+  <note-detail></note-detail>
   <div class="profile-header">
     <img src="/src/assets/pics/banner.jpeg" alt="" class="profile-banner"/>
     <div class="profile-user-info">

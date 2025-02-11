@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {useUserStore} from "../store/userStore.ts";
 import router from "../router";
-import NoteDetail from "./miniComponents/noteDetail.vue";
 const userStore = useUserStore();
 
 const token = localStorage.getItem('token');
@@ -16,8 +15,6 @@ if (token == null || token == "") {
 <template>
 <div class="main">
   <div class="header">
-    <!--  笔记详情展示卡片-->
-    <note-detail></note-detail>
     <router-view v-slot="{Component}">
       <keep-alive>
         <component :is="Component" :key="$route.name" v-if="$route.meta.keepAlive" ></component>

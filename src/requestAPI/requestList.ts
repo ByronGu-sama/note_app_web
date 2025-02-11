@@ -37,6 +37,8 @@ export default {
     NEW_NOTE_COMMENT: "/comment",
     // 获取笔记评论列表
     GET_NOTE_COMMENT_LIST: "/comment/getList",
+    // 获取笔记子评论列表
+    GET_NOTE_SUB_COMMENT_LIST: "/comment/getSubList",
     // 删除笔记评论
     DEl_NOTE_COMMENT: "/comment/delComment",
     // 点赞评论

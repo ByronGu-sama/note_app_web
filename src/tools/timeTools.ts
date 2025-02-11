@@ -11,8 +11,14 @@ const formatTime = (inputTime: string): string => {
     const hoursDiff = Math.floor(minutesDiff / 60);
 
     // 小于24小时
-    if (hoursDiff < 24) {
-        return `${padZero(hoursDiff)}:${padZero(minutesDiff % 60)}:${padZero(secondsDiff % 60)}前`;
+    if (secondsDiff < 0) {
+        return `0秒前`
+    } else if (secondsDiff < 60) {
+        return `${secondsDiff}秒前`
+    } else if (minutesDiff < 60) {
+        return `${minutesDiff}分钟前`
+    } else if (hoursDiff < 24) {
+        return `${hoursDiff}小时前`;
     } else {
         // 大于24小时，格式化为“yyyy年MM月dd日 hh:mm:ss发布”
         const year = pastTime.getFullYear();

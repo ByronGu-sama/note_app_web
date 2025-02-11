@@ -3,6 +3,11 @@ import {ref, watch} from "vue";
 import {useNoteStore} from "../../store/noteStore.ts"
 import CommentsCard from "./commentsCard.vue";
 import timeTools from "../../tools/timeTools.ts";
+import type {ISendNoteContentModel} from "../../models/sendNoteContentModel.ts";
+import {ElMessage} from "element-plus";
+import axios from "axios";
+import requestList from "../../requestAPI/requestList.ts";
+import {onBeforeRouteLeave} from "vue-router";
 
 const noteStore = useNoteStore();
 const openCardStyle = {
@@ -11,12 +16,12 @@ const openCardStyle = {
 const closeCardStyle = {
   display: "none",
 }
-
 let curCardStyle = ref(closeCardStyle)
+let comment = ref<ISendNoteContentModel>({nid:"", content:"", root_id:""})
 
 // 关闭详情页
 const closeCard = () => {
-  noteStore.showNoteCard = false
+  noteStore.closeDetailCard()
 }
 
 // 关注/取关
@@ -24,11 +29,42 @@ const subscribe = () => {
 
 }
 
-// const getMoreComments = () => {
-//   noteStore.getNoteComment(noteStore.noteDetail.nid)
-// }
+const getMoreComments = () => {
+  noteStore.getNoteComment(noteStore.noteDetail.nid)
+}
 
-watch(() => noteStore.showNoteCard, (n) => {
+// 发送一级评论
+const sendComment = () => {
+  comment.value.nid = noteStore.noteDetail.nid
+  if (comment.value.nid == "") {
+    return;
+  }
+  if (comment.value.content == "") {
+    ElMessage({
+      type: "warning",
+      message: "评论不能为空哦～"
+    })
+    return
+  }
+  axios.post(`${requestList.NEW_NOTE_COMMENT}`, comment.value).then(res => {
+    if (res.data.code == 200) {
+      ElMessage({
+        type: "success",
+        message: "电波发送成功～"
+      })
+      noteStore.noteCommentsList.unshift(res.data.data)
+    } else {
+      ElMessage({
+        type: "error",
+        message: res.data.message
+      })
+    }
+  }).finally(() => {
+    comment.value.content = "";
+  })
+}
+
+watch(() => noteStore.noteDetailHasLoaded, (n) => {
   if(n) {
     curCardStyle.value = openCardStyle
   } else {
@@ -36,11 +72,15 @@ watch(() => noteStore.showNoteCard, (n) => {
     noteStore.closeDetailCard()
   }
 })
+
+onBeforeRouteLeave(() => {
+  noteStore.closeDetailCard()
+})
 </script>
 
 <template>
   <div :style="curCardStyle" class="note-detail-wrapper">
-    <el-skeleton animated style="width: 100%; height: 100%;" :loading="!noteStore.noteDetailHasLoaded">
+    <el-skeleton animated style="width: 100%; height: 100%;background-color: white" :loading="!noteStore.noteDetailHasLoaded">
       <template #template>
         <div style="width: 100%; height: 100%;display: flex;">
           <div style="height: 100%;display: flex;align-items: center;justify-content: center;flex: 65%">
@@ -86,42 +126,52 @@ watch(() => noteStore.showNoteCard, (n) => {
           </el-carousel>
         </div>
       </div>
-      <div class="note-detail-right">
-        <el-scrollbar height="590px">
-          <div class="note-detail-right-top-area">
-            <div class="note-detail-right-top-user-area">
-              <el-avatar size="large" :src="noteStore.noteDetail.avatarUrl" style="position: absolute; top: 7px; left: 7px"/>
-              <span>{{noteStore.noteDetail.username}}</span>
-              <button @click="subscribe()">关注</button>
+      <div
+          v-infinite-scroll="getMoreComments"
+          :infinite-scroll-distance="50"
+          :infinite-scroll-disabled="noteStore.noCommentMark"
+          :infinite-scroll-immediate="false"
+          class="note-detail-right">
+        <div class="note-detail-right-top-area">
+          <div class="note-detail-right-top-user-area">
+            <el-avatar size="large" :src="noteStore.noteDetail.avatarUrl" style="position: absolute; top: 7px; left: 7px"/>
+            <span>{{noteStore.noteDetail.username}}</span>
+            <button @click="subscribe()">关注</button>
+          </div>
+          <div class="note-detail-right-bottom-detail-area">
+            <div class="note-detail-right-bottom-detail-area-title">
+              <span>{{noteStore.noteDetail.title}}</span>
             </div>
-            <div class="note-detail-right-bottom-detail-area">
-              <div class="note-detail-right-bottom-detail-area-title">
-                <span>{{noteStore.noteDetail.title}}</span>
-              </div>
-              <div class="note-detail-right-bottom-detail-area-content">
-                <span>{{noteStore.noteDetail.content}}</span>
-              </div>
-              <div class="note-detail-right-bottom-detail-area-time">
-                <span>{{timeTools.formatTime(noteStore.noteDetail.createdAt)}}</span>
-              </div>
+            <div class="note-detail-right-bottom-detail-area-content">
+              <span>{{noteStore.noteDetail.content}}</span>
+            </div>
+            <div class="note-detail-right-bottom-detail-area-time">
+              <span>{{timeTools.formatTime(noteStore.noteDetail.createdAt)}}</span>
             </div>
           </div>
+        </div>
 
-          <div class="note-detail-right-bottom-area" v-if="noteStore.noteCommentsHasLoaded">
-            <div class="note-detail-right-bottom-comments-area">
-              <comments-card
-                  v-for="i in noteStore.noteCommentsList"
-                  :key="i.cid"
-                  :avatar-url="i.avatarUrl"
-                  :username="i.username"
-                  :content="i.content"
-                  :likes_count="i.likes_count"
-                  :published-at="i.created_at"
-                  :children="i.children"
-              ></comments-card>
-            </div>
+        <div class="note-detail-right-middle-area">
+          <el-input :autosize="{minRows: 1, maxRows: 10}" resize="none" type="textarea" v-model="comment.content" class="note-detail-right-middle-area-input"/>
+          <button @click="sendComment()" class="note-detail-right-middle-area-btn">发送</button>
+        </div>
+
+        <div class="note-detail-right-bottom-area" v-if="noteStore.noteCommentsHasLoaded">
+          <div class="note-detail-right-bottom-comments-area">
+            <comments-card
+                v-for="i in noteStore.noteCommentsList"
+                :key="i.cid"
+                :avatar-url="i.avatarUrl"
+                :username="i.username"
+                :content="i.content"
+                :likes_count="i.likes_count"
+                :published-at="i.created_at"
+                :root_id="i.root_id"
+                :nid="i.nid"
+                :parent_id="i.cid"
+            ></comments-card>
           </div>
-        </el-scrollbar>
+        </div>
       </div>
     </div>
   </div>

@@ -10,12 +10,10 @@ let props = defineProps<ISurfaceNote>();
 
 const openNoteCard = () => {
   if (props.nid) {
-    noteStore.noteDetailHasLoaded = false
-    noteStore.noteCommentsHasLoaded = false
+    noteStore.closeDetailCard()
     let nid = props.nid
     noteStore.getNoteDetail(nid)
     noteStore.getNoteComment(nid)
-    noteStore.showNoteCard = true
   } else {
     ElMessage({
       type: "warning",
