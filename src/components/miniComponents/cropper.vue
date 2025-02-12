@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watch} from "vue";
+import {ref} from "vue";
 
 interface ICropperProps {
   img: string;
@@ -20,29 +20,24 @@ const props = withDefaults(defineProps<ICropperProps>(), {
   fixedNumber: () => [1, 1],
   centerBox: () => true,
 })
-const emits = defineEmits(["rawBlobUrl"])
-let showCropper = ref(false)
+const emits = defineEmits(["rawBlob", "close"])
 let cropper = ref<any>("")
 
 const cancelDialog = () => {
-  showCropper.value = false
+  emits("close");
 }
 
 const submitDialog = () => {
   cropper.value.getCropBlob( (blob:any) => {
-    emits("rawBlobUrl", URL.createObjectURL(blob))
+    emits("rawBlob", blob)
   });
-  showCropper.value = false
+  emits("close");
 }
-
-watch(() => props.showCropper, (n) => {
-  showCropper.value = n;
-})
 </script>
 
 <template>
   <el-dialog
-      v-model="showCropper"
+      :model-value="showCropper"
       :show-close="false"
       :close-on-click-modal="false"
       width="800">

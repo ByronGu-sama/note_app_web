@@ -7,7 +7,6 @@ import type {ISendNoteContentModel} from "../../models/sendNoteContentModel.ts";
 import {ElMessage} from "element-plus";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
-import {onBeforeRouteLeave} from "vue-router";
 
 const noteStore = useNoteStore();
 const openCardStyle = {

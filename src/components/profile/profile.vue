@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import noteCard from "../miniComponents/noteCard.vue";
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
-import {useUserStore} from "../../store/userStore.ts";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
 import {ElMessage} from "element-plus";
 import router from "../../router";
-
-const userStore = useUserStore();
+import Cropper from "../miniComponents/cropper.vue";
+import {useUserStore} from "../../store/userStore.ts";
+import {useStyleStore} from "../../store/styleStore.ts";
 
 interface gridArrItem {
   id: number;
   height: number;
   data: ISurfaceNote[];
 }
+
+const userStore = useUserStore();
+const styleStore = useStyleStore();
+
 let gridArr = reactive<gridArrItem[]>([
     {
       id: 1,
@@ -37,7 +41,11 @@ let gridArr = reactive<gridArrItem[]>([
       data: []
     }
 ]);
+let pendingBanner = ref("");
+let showCropper = ref(false);
+let uploadRef = ref<any>(null);
 
+// 将笔记推送至瀑布流队列
 const pushToArrByImgHeight = (notesArr:ISurfaceNote[]) => {
   if (notesArr.length == 0) {
     return;
@@ -54,6 +62,7 @@ const pushToArrByImgHeight = (notesArr:ISurfaceNote[]) => {
   }
 }
 
+// 获取用户笔记
 const getUserNotes = () => {
   axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=1").then((res) => {
     if(res.data.code === 200) {
@@ -76,6 +85,39 @@ const toUpdateProfile = () => {
   router.push({name: "UpdateProfile"});
 }
 
+const handleUpload = (item:any) => {
+  if (item.raw.type !== 'image/jpeg' && item.raw.type !== 'image/png') {
+    ElMessage.error('图片格式只支持JPEG/PNG')
+    return
+  }
+  else if (item.size / 1024 / 1024 > 5) {
+    ElMessage.error('图片最大不超过5MB')
+    return
+  }
+
+  pendingBanner.value = item.url
+  showCropper.value = true
+}
+
+// 获取banner blob文件并提交保存
+const getRawBlob = async (blob: any) => {
+  let formData = new FormData();
+  formData.append("banner", blob);
+  const result1 = await axios.post(`${requestList.UPDATE_PROFILE_BANNER}`, formData)
+  if(result1.status == 200) {
+    styleStore.getStyle()
+  } else {
+    ElMessage.error("更新失败😢")
+  }
+  uploadRef.value.clearFiles()
+}
+
+// 关闭截图器
+const closeCropper = () => {
+  showCropper.value = false;
+  uploadRef.value.clearFiles()
+}
+
 onMounted(() => {
   getUserNotes();
 })
@@ -83,8 +125,16 @@ onMounted(() => {
 
 <template>
 <div class="profile">
+  <cropper
+      :img="pendingBanner"
+      :auto-crop-height="150"
+      :auto-crop-width="150"
+      :fixed-number="[180,37]"
+      :showCropper="showCropper"
+      @rawBlob="getRawBlob"
+      @close="closeCropper"></cropper>
   <div class="profile-header">
-    <img src="/src/assets/pics/banner.jpeg" alt="" class="profile-banner"/>
+    <img :src="styleStore.styleInfo.profileBanner" alt="" class="profile-banner"/>
     <div class="profile-user-info">
       <div class="profile-user-info-avatar">
         <el-avatar
@@ -119,7 +169,17 @@ onMounted(() => {
             <span class="profile-user-relation-body">{{userStore.userInfo?.likes ? userStore.userInfo.likes:0}}</span>
           </div>
         </div>
-        <img src="/src/assets/icons/setting.png" class="profile-profile-setting-icon" alt="setting"/>
+        <el-upload
+          ref="uploadRef"
+          :on-change="handleUpload"
+          :show-file-list="false"
+          :limit="1"
+          list-type="picture"
+          :auto-upload="false">
+          <template #trigger>
+            <img src="/src/assets/icons/setting.png" class="profile-profile-setting-icon" alt="setting"/>
+          </template>
+        </el-upload>
       </div>
     </div>
   </div>

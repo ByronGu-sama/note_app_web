@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import {useUserStore} from "../store/userStore.ts";
 import router from "../router";
 import NoteDetail from "./miniComponents/noteDetail.vue";
+import {useUserStore} from "../store/userStore.ts";
+import {useStyleStore} from "../store/styleStore.ts";
 
 const userStore = useUserStore();
+const styleStore = useStyleStore();
 
 const token = localStorage.getItem('token');
 if (token == null || token == "") {
   router.push("/startup")
 } else {
   userStore.getUserInfo()
+  styleStore.getStyle()
 }
 </script>
 

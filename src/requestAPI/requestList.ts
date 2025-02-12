@@ -9,10 +9,6 @@ export default {
     GET_USER_INFO: "/userInfo",
     // 更新用户信息
     UPDATE_USER_INFO: "/userInfo/update",
-    // 上传用户头像
-    UPLOAD_AVATAR: "/avatar/upload",
-    // 更新用户头像
-    CHANGE_AVATAR: "/avatar/change",
     // post 创建笔记
     NEW_NOTE: "/note",
     // post 获取笔记详情
@@ -45,4 +41,8 @@ export default {
     LIKE_NOTE_COMMENT: "/comment/like",
     // 取消点赞评论
     DISLIKE_NOTE_COMMENT: "/comment/dislike",
+    // 更新用户页banner
+    UPDATE_PROFILE_BANNER: "/style/updateProfileBanner",
+    // 获取主题
+    GET_STYLE: "/style",
 }
