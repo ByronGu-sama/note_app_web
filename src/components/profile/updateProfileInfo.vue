@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useUserStore} from "../../store/userStore.ts";
 import {ElMessage} from "element-plus";
 import { Plus } from '@element-plus/icons-vue'
@@ -52,11 +52,6 @@ const closeCropper = () => {
 
 const getLatestUserInfo = () => {
   userStore.getUserInfo()
-  info.value.username = userStore.userInfo.username!;
-  info.value.signature = userStore.userInfo.signature!;
-  info.value.gender = userStore.userInfo.gender!;
-  info.value.birth = userStore.userInfo.birth!;
-  info.value.avatar = userStore.userInfo.avatarUrl!;
 }
 
 const uploadUserInfo = () => {
@@ -95,6 +90,16 @@ const uploadUserInfo = () => {
 const exit = () => {
   router.back()
 }
+
+watch(() => userStore.userInfo.uid, (n) => {
+  if(n != 0) {
+    info.value.username = userStore.userInfo.username!;
+    info.value.signature = userStore.userInfo.signature!;
+    info.value.gender = userStore.userInfo.gender!;
+    info.value.birth = userStore.userInfo.birth!;
+    info.value.avatar = userStore.userInfo.avatarUrl!;
+  }
+})
 
 onMounted(() => {
   getLatestUserInfo()

@@ -30,11 +30,13 @@ export const useNoteStore = defineStore('note', () => {
     const noteCommentsList = ref<INoteCommentModel[]>([]);
     const noteCommentsHasLoaded = ref(false);
 
-    // 评论分页
+    // 获取指定帖子的评论分页
     const limit = 5;
     let page = 1;
+
     let noCommentMark = ref(false);
 
+    // 获取指定帖子详情
     const getNoteDetail = (nid:string) => {
         noteDetail.value = {
             nid: "",
@@ -68,6 +70,7 @@ export const useNoteStore = defineStore('note', () => {
         })
     }
 
+    // 获取指定帖子评论
     const getNoteComment = (nid:string) => {
         if(nid === "" || page !== 1 && noCommentMark.value) {
             return
@@ -100,6 +103,7 @@ export const useNoteStore = defineStore('note', () => {
         })
     }
 
+    // 关闭帖子详情页的关联操作
     const closeDetailCard = () => {
         noteDetailHasLoaded.value = false;
         noteCommentsHasLoaded.value = false;

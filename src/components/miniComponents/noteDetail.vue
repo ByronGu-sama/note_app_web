@@ -176,5 +176,147 @@ watch(() => noteStore.noteDetailHasLoaded, (n) => {
 </template>
 
 <style scoped>
-@import "../../assets/css/miniComponents/noteDetail.css";
+body {
+  padding: 0;
+  margin: 0;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+.note-detail-wrapper {
+  width: 900px;
+  height: 590px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+.note-detail {
+  width: 900px;
+  height: 590px;
+  overflow: hidden;
+  background-color: white;
+}
+.note-detail-exit-icon {
+  position: absolute;
+  top: 8px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.note-detail-exit-icon > img {
+  width: 30px;
+  height: 30px;
+}
+.note-detail {
+  display: flex;
+}
+.note-detail-left {
+  flex: 65%;
+  display: flex;
+  align-items: center;
+}
+.note-detail-carousel {
+  width: 100%;
+  height: auto;
+}
+.note-detail-carousel-image-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.note-detail-carousel-image {
+  max-height: 100%;
+  max-width: 100%;
+}
+.note-detail-right {
+  flex: 35%;
+  height: 590px;
+  overflow-y: auto;
+}
+.note-detail-right-top-area {
+  width: 100%;
+  height: auto;
+  color: #303133;
+}
+.note-detail-right-top-user-area {
+  width: 100%;
+  height: 70px;
+  position: relative;
+}
+.note-detail-right-top-user-area span {
+  position: absolute;
+  left: 70px;
+  top: 21px;
+  font-size: 17px;
+  font-weight: bold;
+}
+.note-detail-right-top-user-area button{
+  width: 60px;
+  height: 30px;
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  border-radius: 15px;
+  border: none;
+  font-size: 12px;
+  color: #303133;
+  font-weight: bold;
+}
+.note-detail-right-middle-area {
+  width: 100%;
+  position: relative;
+  margin-top: 10px;
+  padding-left: 5px;
+  box-sizing: border-box;
+}
+.note-detail-right-middle-area-input {
+  width: calc(100% - 90px);
+}
+.note-detail-right-middle-area-btn {
+  width: 60px;
+  border: none;
+  height: 30px;
+  border-radius: 15px;
+  position: absolute;
+  right: 20px;
+  font-size: 12px;
+  color: #303133;
+  font-weight: bold;
+  cursor: pointer;
+}
+.note-detail-right-bottom-area {
+  width: 100%;
+}
+.note-detail-right-bottom-detail-area {
+  width: 100%;
+  background-color: white;
+}
+.note-detail-right-bottom-detail-area-title {
+  color: #242424;
+  font-size: 18px;
+  box-sizing: border-box;
+  padding: 5px 7px 5px 7px;
+}
+.note-detail-right-bottom-detail-area-content {
+  color: #303133;
+  font-size: 16px;
+  box-sizing: border-box;
+  padding: 5px 7px 5px 7px;
+}
+.note-detail-right-bottom-detail-area-time {
+  font-size: 12px;
+  text-indent: 8px;
+  color: #242424;
+}
+.note-detail-right-bottom-comments-area {
+  width: 100%;
+  margin-top: 20px;
+}
 </style>

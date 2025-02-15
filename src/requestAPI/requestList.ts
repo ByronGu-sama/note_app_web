@@ -5,6 +5,8 @@ export default {
     REGISTER: "/auth/register",
     // 登出
     LOGOUT: "/auth/logout",
+    // 校验验证码
+    VERIFY_CAPTCHA: "/auth/verifyCaptcha",
     // 获取用户信息
     GET_USER_INFO: "/userInfo",
     // 更新用户信息

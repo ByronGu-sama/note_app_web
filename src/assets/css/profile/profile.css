@@ -6,8 +6,8 @@ body {
 ::-webkit-scrollbar{display: none;}
 .profile {
     width: 100%;
-    height: 100%;
-    overflow-x: auto;
+    height: 590px;
+    overflow: auto;
 }
 .profile-header {
     width: 100%;
@@ -38,16 +38,15 @@ body {
     left: 0;
 }
 .profile-username-area {
-    width: 105px;
-    overflow: hidden;
     height: 40px;
     position: absolute;
     top: 15px;
     left: 105px;
     font-size: 18px;
     line-height: 40px;
-    color: rgba(245, 242, 242);
     text-shadow: 0 0 10px #ffffff;
+    display: flex;
+    align-items: center;
 }
 .profile-user-signature-area {
     width: calc(100% - 105px);
@@ -61,19 +60,16 @@ body {
     color: #303133;
 }
 .profile-edit {
-    width: 60px;
     height: 30px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    position: absolute;
-    top: 20px;
-    left: 222px;
     border-radius: 15px;
-    text-align: center;
-    font-size: 12px;
-    line-height: 30px;
+    margin-left: 10px;
+    font-size: 10px;
+    line-height: 28px;
     color: #f2f2ff;
     cursor: pointer;
-    text-shadow: 0 0 10px #ffffff;
+    background-color: transparent;
+    text-shadow: 0 0 10px #f2f2ff;
 }
 .profile-user-relation {
     position: absolute;

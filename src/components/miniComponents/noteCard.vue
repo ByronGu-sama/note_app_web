@@ -45,5 +45,74 @@ const openNoteCard = () => {
 </template>
 
 <style scoped>
-@import "/src/assets/css/miniComponents/noteCard.css";
+.note-card-area {
+  width: 200px;
+  height: auto;
+  background-color: #f8f8f8;
+  margin-top: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+}
+.note-card-header {
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+.note-card-cover {
+  width: 100%;
+  display: block;
+}
+.note-card-content {
+  width: 100%;
+  height: 80px;
+}
+.note-card-content-title {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-weight: bold;
+  color: #242424;
+  font-size: 15px;
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-indent: 8px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.note-card-content-author {
+  width: 100%;
+  height: 50px;
+  position: relative;
+}
+.note-card-author-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  position: absolute;
+  bottom: 7px;
+  left: 7px;
+}
+.note-card-content-authorName {
+  position: absolute;
+  left: 42px;
+  bottom: 13px;
+  font-size: 13px;
+  color: #242424;
+}
+.note-card-like-icon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 30px;
+  bottom: 13px;
+}
+.note-card-likes {
+  color: #242424;
+  font-size: 12px;
+  position: absolute;
+  right: 20px;
+  bottom: 14px;
+}
 </style>

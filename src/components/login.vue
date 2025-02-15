@@ -5,6 +5,7 @@ import axios from "axios";
 import router from "../router";
 import loginAndRegister from "../requestAPI/requestList.ts";
 import {useUserStore} from "../store/userStore.ts";
+import Verification from "./miniComponents/verification.vue";
 
 const phoneReg:RegExp = /(^1\d{10}$)|(^[0-9]\d{7}$)/;
 const pwdReg:RegExp = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_+~`\-={}|[\]\\:";'<>?,./]{8,}$/;
@@ -15,6 +16,8 @@ let loginInfoByPhone = ref({
   password: ''
 });
 let loading = ref(false);
+let captchaRef = ref<any>(null);
+
 // 登陆
 const login = () => {
   if (!phoneReg.test(loginInfoByPhone.value.phone)) {
@@ -38,23 +41,25 @@ const login = () => {
       localStorage.setItem('token', token);
       router.push('/home');
     }
-  }).catch( res => {
+  }).catch( () => {
     ElMessage({
       type: 'error',
-      message: res.data.message
+      message: "登陆失败"
     });
   }).finally(() => {
     loading.value = false;
   })
 }
 
+const show = () => {
+    captchaRef.value.popup("verify")
+}
 </script>
 
 <template>
 <div class="login"
      v-loading="loading"
-     element-loading-text="登陆中..."
->
+     element-loading-text="登陆中...">
   <div class="login-container">
     <p>SIGN IN</p>
     <el-input
@@ -72,7 +77,9 @@ const login = () => {
         max="256"
     />
     <br>
-    <button @click="login" class="loginBtn">登陆</button>
+    <verification @verified="login" ref="captchaRef">
+      <button class="loginBtn" @click.stop="show">登陆</button>
+    </verification>
   </div>
 </div>
 </template>

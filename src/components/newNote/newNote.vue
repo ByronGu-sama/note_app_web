@@ -9,6 +9,7 @@ import router from "../../router";
 let fileList = reactive<UploadUserFile[]>([])
 let title = ref('')
 let content = ref('')
+let loading = ref(false)
 
 const uploadNote = () => {
   if(title.value === "") {
@@ -34,7 +35,7 @@ const uploadNote = () => {
     })
     return
   }
-
+  loading.value = true
   let forms = new FormData()
   forms.append("title", title.value)
   forms.append("content", content.value)
@@ -60,6 +61,8 @@ const uploadNote = () => {
       type: 'warning',
       message: "发布失败"
     })
+  }).finally(() => {
+    loading.value = false
   })
 }
 
@@ -69,7 +72,7 @@ const handleUpload = (_:any, itemList:any) => {
 </script>
 
 <template>
-<div class="newNote">
+<div class="newNote" v-loading.fullscreen.lock="loading" element-loading-text="上传中～">
   <div class="newNote-pics-area">
     <el-upload
         :file-list="fileList"
@@ -78,7 +81,7 @@ const handleUpload = (_:any, itemList:any) => {
         :limit="10"
         :auto-upload="false"
         :on-change="handleUpload"
-        accept=".jpeg,.png,.jpg">
+        accept=".jpeg, .png, .jpg, .webp, .heif, .heic">
       <el-icon><Plus/></el-icon>
     </el-upload>
   </div>

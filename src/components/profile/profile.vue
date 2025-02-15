@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
 import noteCard from "../miniComponents/noteCard.vue";
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
 import axios from "axios";
@@ -44,6 +44,7 @@ let gridArr = reactive<gridArrItem[]>([
 let pendingBanner = ref("");
 let showCropper = ref(false);
 let uploadRef = ref<any>(null);
+let noMoreNotesMark = ref(false);
 
 // 将笔记推送至瀑布流队列
 const pushToArrByImgHeight = (notesArr:ISurfaceNote[]) => {
@@ -62,10 +63,23 @@ const pushToArrByImgHeight = (notesArr:ISurfaceNote[]) => {
   }
 }
 
+// 用户笔记分页
+let page = 1;
+let pageSize = 10;
+let onLoading = false;
+
 // 获取用户笔记
 const getUserNotes = () => {
-  axios.get(requestList.MY_NOTE_LIST + "?page=1&limit=1").then((res) => {
+  if(noMoreNotesMark.value || onLoading) {
+    return
+  }
+  onLoading = true;
+  axios.get(`${requestList.MY_NOTE_LIST}?page=${page}&limit=${pageSize}`).then((res) => {
     if(res.data.code === 200) {
+      if (res.data.data.length < pageSize) {
+        noMoreNotesMark.value = true;
+      }
+      page++
       pushToArrByImgHeight(res.data.data);
     } else {
       ElMessage({
@@ -74,23 +88,25 @@ const getUserNotes = () => {
       });
     }
   }).catch(() => {
-    ElMessage({
-      type: "error",
-      message: "获取笔记失败",
-    });
-  });
+    noMoreNotesMark.value = true;
+  }).finally(() => {
+    onLoading = false;
+  })
 }
 
 const toUpdateProfile = () => {
   router.push({name: "UpdateProfile"});
 }
 
+const toAppSetting = () => {
+  router.push({name: "AppSetting"});
+}
+
 const handleUpload = (item:any) => {
   if (item.raw.type !== 'image/jpeg' && item.raw.type !== 'image/png') {
     ElMessage.error('图片格式只支持JPEG/PNG')
     return
-  }
-  else if (item.size / 1024 / 1024 > 5) {
+  } else if (item.size / 1024 / 1024 > 5) {
     ElMessage.error('图片最大不超过5MB')
     return
   }
@@ -102,7 +118,7 @@ const handleUpload = (item:any) => {
 // 获取banner blob文件并提交保存
 const getRawBlob = async (blob: any) => {
   let formData = new FormData();
-  formData.append("banner", blob);
+  formData.append("file", blob);
   const result1 = await axios.post(`${requestList.UPDATE_PROFILE_BANNER}`, formData)
   if(result1.status == 200) {
     styleStore.getStyle()
@@ -117,14 +133,16 @@ const closeCropper = () => {
   showCropper.value = false;
   uploadRef.value.clearFiles()
 }
-
-onMounted(() => {
-  getUserNotes();
-})
 </script>
 
 <template>
-<div class="profile">
+<div
+    class="profile"
+    v-infinite-scroll="getUserNotes"
+    :infinite-scroll-disabled="noMoreNotesMark"
+    :infinite-scroll-delay="500"
+    :infinite-scroll-distance="50"
+    :infinite-scroll-immediate="true">
   <cropper
       :img="pendingBanner"
       :auto-crop-height="150"
@@ -144,13 +162,12 @@ onMounted(() => {
             :size="80"
             :src="userStore.userInfo?.avatarUrl"/>
         <div class="profile-username-area">
-          <span>{{userStore.userInfo?.username ? userStore.userInfo.username : ""}}</span>
+          <span> {{userStore.userInfo?.username ? userStore.userInfo.username : ""}}</span>
+          <button class="profile-edit" @click="toUpdateProfile">编辑资料</button>
+          <button class="profile-edit" @click="toAppSetting">设置</button>
         </div>
         <div class="profile-user-signature-area">
           <span>{{userStore.userInfo?.signature ? userStore.userInfo.signature:""}}</span>
-        </div>
-        <div class="profile-edit" @click="toUpdateProfile">
-          编辑资料
         </div>
         <div class="profile-user-relation">
           <div>
@@ -183,7 +200,6 @@ onMounted(() => {
       </div>
     </div>
   </div>
-
   <div class="profile-body">
 <!--    1-->
     <div class="note-body">

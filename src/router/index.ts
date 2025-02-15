@@ -16,12 +16,18 @@ const routes:any[] = [
             {
                 path: "video",
                 name: "Video",
-                component: () => import ('../components/video/video.vue')
+                component: () => import ('../components/video/video.vue'),
+                meta: {
+                    keepAlive: false
+                }
             },
             {
                 path: "newNote",
                 name: "newNote",
                 component: () => import ('../components/newNote/newNote.vue'),
+                meta: {
+                    keepAlive: false
+                }
             },
             {
                 path: "message",
@@ -45,6 +51,14 @@ const routes:any[] = [
         path: "/updateProfile",
         name: "UpdateProfile",
         component: () => import('../components/profile/updateProfileInfo.vue'),
+        meta: {
+            keepAlive: false
+        },
+    },
+    {
+        path: "/appSetting",
+        name: "AppSetting",
+        component: () => import('../components/profile/appSetting.vue'),
         meta: {
             keepAlive: false
         },

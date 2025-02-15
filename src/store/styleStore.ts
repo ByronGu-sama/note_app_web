@@ -19,8 +19,16 @@ export const useStyleStore = defineStore('style', () => {
         })
     }
 
+    const clearStyle = () => {
+        styleInfo.value = {
+            uid: 0,
+            profileBanner: "",
+        }
+    }
+
     return {
         styleInfo,
         getStyle,
+        clearStyle,
     }
 })

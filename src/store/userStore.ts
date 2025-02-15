@@ -20,14 +20,34 @@ export const useUserStore = defineStore('user', () => {
         likes: 0,
         noteCount: 0,
     })
-    const getUserInfo = async () => {
+    const getUserInfo = () => {
+        clearUserInfo()
         axios.get(userInfoRequest.GET_USER_INFO).then((res) => {
             userInfo.value = {...res.data.data}
         })
     }
 
+    const clearUserInfo = () => {
+        userInfo.value = {
+            uid: 0,
+            username: "",
+            avatarUrl: "",
+            birth: "",
+            gender: "0",
+            signature: "",
+            address: "",
+            language: "",
+            collects: 0,
+            follows: 0,
+            followers: 0,
+            likes: 0,
+            noteCount: 0,
+        }
+    }
+
     return {
         userInfo,
         getUserInfo,
+        clearUserInfo,
     }
 })

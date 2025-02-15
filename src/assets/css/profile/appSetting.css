@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.appSetting-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.appSetting-wrapper-top-bar {
+    width: 100%;
+    height: 50px;
+    position: relative;
+}
+.appSetting-wrapper-exit-icon {
+    position: absolute;
+    top: 8px;
+    left: 7px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.appSetting-wrapper-body {
+    width: 100%;
+    height: 600px;
+}
+.appSetting-sub-component {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+.get-VCode-btn {
+    width: auto;
+    height: 30px;
+    border: 1px solid grey;
+    background-color: transparent;
+    position: absolute;
+    top: 73px;
+    left: 125px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+.submit-btn {
+    position: absolute;
+    top: 120px;
+    left: 0;
+    width: 200px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    height: 30px;
+    font-size: 13px;
+    background-color: transparent;
+    cursor: pointer;
+}
+.logout-btn {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: 200px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    height: 30px;
+    font-size: 13px;
+    background-color: transparent;
+    cursor: pointer;
+}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import timeTools from "../../tools/timeTools.ts";
-import {onBeforeMount, onMounted, reactive, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import type {ISendNoteContentModel} from "../../models/sendNoteContentModel.ts";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
@@ -129,5 +129,151 @@ onBeforeMount(() => {
 </template>
 
 <style scoped>
-@import "../../assets/css/miniComponents/commentsCard.css";
+body {
+  padding: 0;
+  margin: 0;
+}
+.comment-card {
+  width: 100%;
+  margin-top: 10px;
+  position: relative;
+}
+.comment-card-userInfo {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  color: #303133;
+}
+.comment-card-mainContent {
+  width: 100%;
+  height: auto;
+}
+.comment-card-userInfo-left {
+  width: calc(100% - 50px);
+  height: 50px;
+  position: relative;
+}
+.comment-card-userInfo-right {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #303133;
+}
+.comment-card-userInfo-right img {
+  width: 24px;
+  height: 24px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+.comment-card-userInfo-right span {
+  font-size: 12px;
+}
+.comment-card-username {
+  position: absolute;
+  top: 12px;
+  left: 50px;
+  font-size: 15px;
+}
+.comment-card-comment {
+  width: 100%;
+  height: calc(100% - 80px);
+  box-sizing: border-box;
+  padding: 5px;
+  font-size: 15px;
+  color: #303133;
+  text-indent: 3px;
+}
+.comment-card-reply-area {
+  width: 100%;
+  position: relative;
+  margin-top: 10px;
+  padding-left: 5px;
+  box-sizing: border-box;
+}
+.comment-card-reply-area-input {
+  width: calc(100% - 90px);
+}
+.comment-card-reply-area-btn {
+  width: 60px;
+  border: none;
+  height: 30px;
+  border-radius: 15px;
+  position: absolute;
+  right: 20px;
+  font-size: 12px;
+  color: #303133;
+  font-weight: bold;
+  cursor: pointer;
+}
+.comment-card-bottom {
+  width: 100%;
+  height: 30px;
+  font-size: 12px;
+  line-height: 30px;
+  text-indent: 8px;
+  color: #606266;
+}
+.comment-card-subContent {
+  width: 100%;
+  height: auto;
+}
+.comment-card-subContent-body {
+  width: 100%;
+  padding-left: 10px;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+.comment-card-subContent-userInfo {
+  width: 100%;
+  height: 35px;
+  color: #303133;
+  display: flex;
+}
+.comment-card-subContent-userInfo-left {
+  width: calc(100% - 50px);
+  height: 35px;
+  position: relative;
+}
+.comment-card-subContent-username {
+  position: absolute;
+  top: 6px;
+  left: 33px;
+  font-size: 13px;
+}
+.comment-card-subContent-userInfo-right {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5px;
+  box-sizing: border-box;
+}
+.comment-card-subContent-userInfo-right img {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.comment-card-subContent-userInfo-right span {
+  font-size: 12px;
+}
+.comment-card-subContent-comment {
+  width: 100%;
+  height: calc(100% - 80px);
+  box-sizing: border-box;
+  padding: 5px;
+  font-size: 13px;
+  color: #303133;
+  text-indent: 3px;
+}
+.comment-card-subContent-bottom {
+  width: 100%;
+  height: 20px;
+  font-size: 10px;
+  line-height: 20px;
+  text-indent: 8px;
+  color: #606266;
+}
 </style>
