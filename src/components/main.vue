@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import router from "../router";
-import NoteDetail from "./miniComponents/noteDetail.vue";
 import {useUserStore} from "../store/userStore.ts";
 import {useStyleStore} from "../store/styleStore.ts";
 

@@ -3,6 +3,7 @@ const routes:any[] = [
     {
         path: "/",
         name: "Main",
+        redirect: "/home",
         component: () => import ('../components/main.vue'),
         children: [
             {

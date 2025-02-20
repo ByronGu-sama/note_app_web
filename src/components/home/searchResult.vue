@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import {Search } from '@element-plus/icons-vue'
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {ElMessage} from "element-plus";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
 import Waterfall from "../miniComponents/waterfall.vue";
 import router from "../../router";
 
-let keyword = ref('');
+let keyword = ref<string>('');
 let searchResult = ref<any>([]);
-let canSearch = ref(true);
+let canSearch = ref<boolean>(true);
 let originKeyword = "";
 let page = 1;
 let limit = 15;
+let showSearchResult = ref(true);
 
 const getNoteList = () => {
   if(keyword.value === "") {
@@ -42,6 +43,19 @@ const getNoteList = () => {
 const exit = () => {
   router.back();
 }
+
+watch(showSearchResult, (n) => {
+  console.log(n)
+})
+
+router.beforeEach((_, from, next) => {
+  if(from.name !== "noteDetail") {
+    keyword.value = "";
+    showSearchResult.value = false;
+    showSearchResult.value = true;
+  }
+  next()
+})
 </script>
 
 <template>
@@ -63,7 +77,7 @@ const exit = () => {
       :infinite-scroll-delay="1000"
       :infinite-scroll-distance="50"
       :infinite-scroll-disabled="canSearch">
-    <waterfall :data="searchResult"></waterfall>
+    <waterfall :data="searchResult" v-if="showSearchResult"></waterfall>
   </div>
 </div>
 </template>

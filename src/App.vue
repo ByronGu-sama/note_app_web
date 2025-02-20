@@ -1,14 +1,42 @@
 <script setup lang="ts">
+import {ref} from "vue";
+import router from "./router";
 
+const cachedPage = ref<string[]>([]);
+
+router.beforeEach((to, from, next) => {
+  if (from.name === "SearchResult" && to.name === "NoteDetail") {
+    // 从 搜索结果页 跳转到 笔记详情页 时缓存搜索结果页
+    if (cachedPage.value.indexOf("searchResult") === -1) {
+      cachedPage.value.push("searchResult");
+    }
+  } else if (from.name === "SearchResult") {
+    // 从 搜索结果页 跳转到 其他页面 时取消缓存搜索结果页
+    if (cachedPage.value.indexOf("searchResult") !== -1) {
+      const index = cachedPage.value.indexOf("searchResult");
+      if (index !== -1) {
+        cachedPage.value.splice(index, 1);
+      }
+    }
+  } else if(from.name){
+    // 其他情况下根据 meta.keepAlive 判断是否缓存页面, keep-alive的include属性根据页面名称判定是否缓存，非路由名称
+    let f = from.name.toString.name;
+    const temp = f.charAt(0).toLowerCase() + f.slice(1);
+    if (from.meta.keepAlive && cachedPage.value.indexOf(temp) === -1) {
+      cachedPage.value.push(temp);
+    }
+  }
+
+  next();
+});
 </script>
 
 <template>
   <div class="app">
-    <router-view v-slot="{Component}">
-      <keep-alive>
-        <component :is="Component" :key="$route.fullPath" v-if="$route.meta.keepAlive" ></component>
+    <router-view v-slot="{ Component }">
+      <keep-alive :include="cachedPage">
+        <component :is="Component" />
       </keep-alive>
-      <component :is="Component" :key="$route.fullPath" v-if="!$route.meta.keepAlive" ></component>
     </router-view>
   </div>
 </template>

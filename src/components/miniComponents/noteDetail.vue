@@ -8,6 +8,7 @@ import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
 import type {INoteDetailModel} from "../../models/noteDetailModel.ts";
 import type {INoteCommentModel} from "../../models/noteCommentModel.ts";
+import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router';
 import router from "../../router";
 
@@ -199,11 +200,18 @@ onMounted(() => {
             <el-carousel-item v-for="(pic,index) in noteDetail.pics" :key="index">
               <div class="note-detail-carousel-image-wrapper">
                 <el-image
-                    fit="cover"
+                    style="width: 100%; height: 100%;"
+                    fit="contain"
                     :src="pic"
                     :preview-teleported="true"
                     :preview-src-list="noteDetail.pics"
-                    :infinite="false"/>
+                    :infinite="false">
+                  <template #error>
+                    <div class="image-slot">
+                      <el-icon><icon-picture/></el-icon>
+                    </div>
+                  </template>
+                </el-image>
               </div>
             </el-carousel-item>
           </el-carousel>
@@ -251,8 +259,8 @@ onMounted(() => {
                 :published-at="i.created_at"
                 :root_id="i.root_id"
                 :nid="i.nid"
-                :parent_id="i.cid"
-            ></comments-card>
+                :parent_id="i.cid">
+            </comments-card>
           </div>
         </div>
       </div>
@@ -309,16 +317,8 @@ body {
 .note-detail-carousel-image-wrapper {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 10px;
   box-sizing: border-box;
-  overflow: hidden;
-}
-.note-detail-carousel-image {
-  max-height: 100%;
-  max-width: 100%;
 }
 .note-detail-right {
   flex: 35%;
