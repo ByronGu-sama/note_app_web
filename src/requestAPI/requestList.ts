@@ -19,6 +19,8 @@ export default {
     DEL_NOTE: "/note",
     // 获取笔记列表
     NOTE_LIST: "/note/list",
+    // 搜索笔记
+    SEARCH_NOTE_LIST: "/note/search",
     // 获取我的笔记
     MY_NOTE_LIST: "/note/myNotes",
     // 获取笔记图片

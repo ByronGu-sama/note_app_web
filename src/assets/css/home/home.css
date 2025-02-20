@@ -2,3 +2,35 @@ body {
     margin: 0;
     padding: 0;
 }
+.home-header {
+    width: 100%;
+    height: 70px;
+    position: relative;
+    text-align: center;
+}
+.home-header > img {
+    height: 70px;
+    transition: 0.2s linear;
+}
+.home-header-input-block {
+    height: 30px;
+    width: 150px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border-radius: 15px;
+    border: 1px solid #e4e4e4;
+    cursor: text;
+    transition: 0.2s linear all;
+}
+.home-header-input-block img {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 8px;
+    top: 5px;
+}
+.home-body {
+    width: 100%;
+    height: 520px;
+}

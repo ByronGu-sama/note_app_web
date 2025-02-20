@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import {reactive, ref} from "vue";
-import noteCard from "../miniComponents/noteCard.vue";
+import {ref} from "vue";
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
@@ -9,88 +8,37 @@ import router from "../../router";
 import Cropper from "../miniComponents/cropper.vue";
 import {useUserStore} from "../../store/userStore.ts";
 import {useStyleStore} from "../../store/styleStore.ts";
-
-interface gridArrItem {
-  id: number;
-  height: number;
-  data: ISurfaceNote[];
-}
+import Waterfall from "../miniComponents/waterfall.vue";
 
 const userStore = useUserStore();
 const styleStore = useStyleStore();
 
-let gridArr = reactive<gridArrItem[]>([
-    {
-      id: 1,
-      height: 0,
-      data: []
-    },
-    {
-      id: 2,
-      height: 0,
-      data: []
-    },
-    {
-      id: 3,
-      height: 0,
-      data: []
-    },
-    {
-      id: 4,
-      height: 0,
-      data: []
-    }
-]);
-let pendingBanner = ref("");
 let showCropper = ref(false);
 let uploadRef = ref<any>(null);
-let noMoreNotesMark = ref(false);
-
-// 将笔记推送至瀑布流队列
-const pushToArrByImgHeight = (notesArr:ISurfaceNote[]) => {
-  if (notesArr.length == 0) {
-    return;
-  }
-  for (let i of notesArr) {
-    let minHeightIndex = 0;
-    for (let j = 1; j < gridArr.length; j++) {
-      if (gridArr[minHeightIndex].height > gridArr[j].height) {
-        minHeightIndex = j;
-      }
-    }
-    gridArr[minHeightIndex].data.push(i);
-    gridArr[minHeightIndex].height += i.cover_height!;
-  }
-}
-
-// 用户笔记分页
-let page = 1;
-let pageSize = 10;
-let onLoading = false;
 
 // 获取用户笔记
+let page = 1;
+let pageSize = 1;
+let onLoading = ref(false);
+let noMoreNotesMark = ref(false);
+let result = ref<ISurfaceNote[]>([]);
+
 const getUserNotes = () => {
-  if(noMoreNotesMark.value || onLoading) {
+  if(page === 2) return;
+  if(noMoreNotesMark.value || onLoading.value) {
     return
   }
-  onLoading = true;
+  onLoading.value = true;
   axios.get(`${requestList.MY_NOTE_LIST}?page=${page}&limit=${pageSize}`).then((res) => {
-    if(res.data.code === 200) {
-      if (res.data.data.length < pageSize) {
-        noMoreNotesMark.value = true;
-      }
-      page++
-      pushToArrByImgHeight(res.data.data);
-    } else {
-      ElMessage({
-        type: "error",
-        message: res.data.message,
-      });
+    if (res.data.data.length < pageSize) {
+      noMoreNotesMark.value = true;
     }
+    result.value = res.data.data;
+    page++
   }).catch(() => {
     noMoreNotesMark.value = true;
   }).finally(() => {
-    onLoading = false;
+    onLoading.value = false;
   })
 }
 
@@ -102,6 +50,7 @@ const toAppSetting = () => {
   router.push({name: "AppSetting"});
 }
 
+let pendingBanner = ref("");
 const handleUpload = (item:any) => {
   if (item.raw.type !== 'image/jpeg' && item.raw.type !== 'image/png') {
     ElMessage.error('图片格式只支持JPEG/PNG')
@@ -119,12 +68,11 @@ const handleUpload = (item:any) => {
 const getRawBlob = async (blob: any) => {
   let formData = new FormData();
   formData.append("file", blob);
-  const result1 = await axios.post(`${requestList.UPDATE_PROFILE_BANNER}`, formData)
-  if(result1.status == 200) {
+  axios.post(`${requestList.UPDATE_PROFILE_BANNER}`, formData).then(() => {
     styleStore.getStyle()
-  } else {
+  }).catch(() => {
     ElMessage.error("更新失败😢")
-  }
+  })
   uploadRef.value.clearFiles()
 }
 
@@ -139,7 +87,7 @@ const closeCropper = () => {
 <div
     class="profile"
     v-infinite-scroll="getUserNotes"
-    :infinite-scroll-disabled="noMoreNotesMark"
+    :infinite-scroll-disabled="noMoreNotesMark || onLoading"
     :infinite-scroll-delay="500"
     :infinite-scroll-distance="50"
     :infinite-scroll-immediate="true">
@@ -201,59 +149,7 @@ const closeCropper = () => {
     </div>
   </div>
   <div class="profile-body">
-<!--    1-->
-    <div class="note-body">
-      <noteCard
-          v-for="i in gridArr[0].data" key="i"
-          :avatarUrl="i.avatarUrl"
-          :username="i.username"
-          :cover="i.cover"
-          :likesCount="i.likesCount"
-          :title="i.title"
-          :cover_height="i.cover_height"
-          :nid="i.nid"
-      ></noteCard>
-    </div>
-<!--    2-->
-    <div class="note-body">
-      <noteCard
-          v-for="i in gridArr[1].data" key="i"
-          :avatarUrl="i.avatarUrl"
-          :username="i.username"
-          :cover="i.cover"
-          :likesCount="i.likesCount"
-          :title="i.title"
-          :cover_height="i.cover_height"
-          :nid="i.nid"
-      ></noteCard>
-    </div>
-<!--    3-->
-    <div class="note-body">
-      <noteCard
-          v-for="i in gridArr[2].data" key="i"
-          :avatarUrl="i.avatarUrl"
-          :username="i.username"
-          :cover="i.cover"
-          :likesCount="i.likesCount"
-          :title="i.title"
-          :cover_height="i.cover_height"
-          :nid="i.nid"
-      ></noteCard>
-    </div>
-<!--    4-->
-    <div class="note-body">
-      <noteCard
-          v-for="i in gridArr[3].data" key="i"
-          :avatarUrl="i.avatarUrl"
-          :username="i.username"
-          :cover="i.cover"
-          :likesCount="i.likesCount"
-          :title="i.title"
-          :cover_height="i.cover_height"
-          :nid="i.nid"
-      ></noteCard>
-    </div>
-
+    <waterfall :data="result"></waterfall>
   </div>
 </div>
 </template>

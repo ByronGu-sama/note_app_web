@@ -8,7 +8,6 @@ import './style.css'
 import 'vue-cropper/next/dist/index.css'
 import 'element-plus/dist/index.css'
 import VueCropper from "vue-cropper/next";
-import {useNoteStore} from "./store/noteStore.ts";
 const pinia = createPinia()
 
 // 默认地址
@@ -53,12 +52,6 @@ if (token) {
 } else {
     router.push("/startup");
 }
-
-router.afterEach(() => {
-    const noteStore = useNoteStore();
-    noteStore.closeDetailCard();
-});
-
 
 createApp(App)
     .use(router)

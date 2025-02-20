@@ -9,5 +9,5 @@ export interface ISurfaceNote {
     public?: number; // 是否公开
     categoryId?: string; // 分类
     tags?: string; // 标签
-    likesCount?: number; // 点赞数
+    likes_count?: number; // 点赞数
 }

@@ -4,7 +4,12 @@
 
 <template>
   <div class="app">
-    <router-view></router-view>
+    <router-view v-slot="{Component}">
+      <keep-alive>
+        <component :is="Component" :key="$route.fullPath" v-if="$route.meta.keepAlive" ></component>
+      </keep-alive>
+      <component :is="Component" :key="$route.fullPath" v-if="!$route.meta.keepAlive" ></component>
+    </router-view>
   </div>
 </template>
 

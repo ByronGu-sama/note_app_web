@@ -18,8 +18,6 @@ if (token == null || token == "") {
 
 <template>
 <div class="main">
-  <!--  笔记详情展示卡片-->
-  <note-detail></note-detail>
   <div class="header">
     <router-view v-slot="{Component}">
       <keep-alive>
@@ -40,7 +38,7 @@ if (token == null || token == "") {
       <div class="nav-btn">
         <img src="/src/assets/icons/video1.png" alt="video"/>
         <br>
-        <span>视频</span>
+        <span>热点</span>
       </div>
     </router-link>
     <router-link to="/newNote" class="router-link-active">

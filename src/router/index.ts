@@ -64,6 +64,22 @@ const routes:any[] = [
         },
     },
     {
+        path: "/searchResult",
+        name: "SearchResult",
+        component: () => import('../components/home/searchResult.vue'),
+        meta: {
+            keepAlive: true
+        }
+    },
+    {
+        path: "/noteDetail/:nid",
+        name: "NoteDetail",
+        component: () => import('../components/miniComponents/noteDetail.vue'),
+        meta: {
+            keepAlive: false
+        }
+    },
+    {
         path: "/startup",
         name: "Startup",
         component: () => import ('../components/startup.vue'),

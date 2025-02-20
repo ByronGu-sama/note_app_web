@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.searchResult-wrapper {
+    width: 100%;
+    height: 650px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.searchResult-top {
+    width: 100%;
+    height: 40px;
+    padding-top: 7px;
+    position: relative;
+}
+.searchResult-exit-icon {
+    position: absolute;
+    top: 8px;
+    left: 7px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.searchResult-body {
+    height: 603px;
+    width: 100%;
+    overflow: auto;
+}

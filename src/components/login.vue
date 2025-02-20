@@ -36,11 +36,9 @@ const login = () => {
   // }
   loading.value = true;
   axios.post(loginAndRegister.LOGIN, loginInfoByPhone.value).then( res => {
-    if (res.data.code == 200) {
-      const token = res.data.token;
-      localStorage.setItem('token', token);
-      router.push('/home');
-    }
+    const token = res.data.token;
+    localStorage.setItem('token', token);
+    router.push('/home');
   }).catch( () => {
     ElMessage({
       type: 'error',
