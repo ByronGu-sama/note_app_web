@@ -33,9 +33,9 @@ if (token == null || token == "") {
         <span>首页</span>
       </div>
     </router-link>
-    <router-link to="/video" class="router-link-active">
+    <router-link to="/topic" class="router-link-active">
       <div class="nav-btn">
-        <img src="/src/assets/icons/video1.png" alt="video"/>
+        <img src="/src/assets/icons/video1.png" alt="topic"/>
         <br>
         <span>热点</span>
       </div>

@@ -2,8 +2,14 @@
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
 import {convertToShortNumber} from "../../tools/numberTools.ts";
 import router from "../../router";
+import {ref} from "vue";
 
 let props = defineProps<ISurfaceNote>();
+let loadedImg = ref<boolean>(false);
+
+const showImg = () => {
+  loadedImg.value = true;
+}
 
 const openNoteCard = () => {
   router.push(`/noteDetail/:${props.nid}`)
@@ -14,8 +20,13 @@ const openNoteCard = () => {
   <div class="note-card-area"
        @click="openNoteCard()"
        v-if="props.avatarUrl !== undefined && props.cover !== undefined && props.title !== undefined && props.username !== undefined && props.likes_count !== undefined">
+    <el-skeleton :loading="!loadedImg" animated>
+      <template #template>
+        <el-skeleton-item variant="image" style="width: 100%;height: 200px"></el-skeleton-item>
+      </template>
+    </el-skeleton>
     <div class="note-card-header">
-      <img :src="props.cover" alt="" class="note-card-cover"/>
+      <img :src="props.cover" alt="" v-show="loadedImg" @load="showImg" class="note-card-cover"/>
     </div>
     <div class="note-card-content">
       <div class="note-card-content-title">

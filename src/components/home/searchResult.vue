@@ -13,7 +13,8 @@ let canSearch = ref<boolean>(true);
 let originKeyword = "";
 let page = 1;
 let limit = 15;
-let showSearchResult = ref(true);
+let showSearchResult = ref<boolean>(true);
+let clearSearch = ref<boolean>(false);
 
 const getNoteList = () => {
   if(keyword.value === "") {
@@ -21,6 +22,7 @@ const getNoteList = () => {
     return
   }
   if(originKeyword !== keyword.value) {
+    clearSearch.value = !clearSearch.value;
     searchResult.value = [];
     canSearch.value = true;
     page = 1;
@@ -47,15 +49,6 @@ const exit = () => {
 watch(showSearchResult, (n) => {
   console.log(n)
 })
-
-router.beforeEach((_, from, next) => {
-  if(from.name !== "noteDetail") {
-    keyword.value = "";
-    showSearchResult.value = false;
-    showSearchResult.value = true;
-  }
-  next()
-})
 </script>
 
 <template>
@@ -77,7 +70,11 @@ router.beforeEach((_, from, next) => {
       :infinite-scroll-delay="1000"
       :infinite-scroll-distance="50"
       :infinite-scroll-disabled="canSearch">
-    <waterfall :data="searchResult" v-if="showSearchResult"></waterfall>
+    <waterfall
+        v-if="showSearchResult"
+        :data="searchResult"
+        :clearData="clearSearch">
+    </waterfall>
   </div>
 </div>
 </template>

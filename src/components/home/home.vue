@@ -1,13 +1,36 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import router from "../../router";
+import Waterfall from "../miniComponents/waterfall.vue";
+import requestList from "../../requestAPI/requestList.ts";
+import axios from "axios";
 
-let canScroll = ref(false);
+let canScroll = ref(true);
+let noteList = ref([]);
+let onLoading = ref(false);
+let page = 1;
+let limit = 10;
 
 const toSearchPage = () => {
   router.push("/searchResult");
 }
+
+function getMoreNotes() {
+  if(!canScroll.value || onLoading.value) return;
+  onLoading.value = true;
+  axios.get(`${requestList.NOTE_LIST}?page=${page}&limit=${limit}`).then(res => {
+    noteList.value = res.data.data;
+    page++
+  }).catch(() => {
+    canScroll.value = false;
+  }).finally(() => {
+    onLoading.value = false;
+  })
+}
+// onMounted(() => {
+//   getMoreNotes();
+// })
 </script>
 
 <template>
@@ -19,12 +42,12 @@ const toSearchPage = () => {
       </div>
     </div>
     <div class="home-body"
+         v-infinite-scroll="getMoreNotes"
          :infinite-scroll-immediate="true"
-         :infinite-scroll-distance="50"
-         :infinite-scroll-delay="500"
-         :infinite-scroll-disabled="canScroll"
-    >
-
+         :infinite-scroll-disabled="!canScroll"
+         :infinite-scroll-distance="100"
+         :infinite-scroll-delay="800">
+      <waterfall :data="noteList"></waterfall>
     </div>
   </div>
 </template>

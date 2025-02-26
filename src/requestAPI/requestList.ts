@@ -41,7 +41,7 @@ export default {
     GET_NOTE_SUB_COMMENT_LIST: "/comment/getSubList",
     // 删除笔记评论
     DEl_NOTE_COMMENT: "/comment/delComment",
-    // 点赞评论
+    // 点赞评论 /comment/like/:cid
     LIKE_NOTE_COMMENT: "/comment/like",
     // 取消点赞评论
     DISLIKE_NOTE_COMMENT: "/comment/dislike",

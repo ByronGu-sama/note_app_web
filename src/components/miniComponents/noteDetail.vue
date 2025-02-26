@@ -259,6 +259,7 @@ onMounted(() => {
                 :published-at="i.created_at"
                 :root_id="i.root_id"
                 :nid="i.nid"
+                :cid="i.cid"
                 :parent_id="i.cid">
             </comments-card>
           </div>

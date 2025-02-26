@@ -18,13 +18,12 @@ let uploadRef = ref<any>(null);
 
 // 获取用户笔记
 let page = 1;
-let pageSize = 1;
+let pageSize = 24;
 let onLoading = ref(false);
 let noMoreNotesMark = ref(false);
 let result = ref<ISurfaceNote[]>([]);
 
 const getUserNotes = () => {
-  if(page === 2) return;
   if(noMoreNotesMark.value || onLoading.value) {
     return
   }

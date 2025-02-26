@@ -9,7 +9,7 @@ interface gridArrItem {
   height: number;
   data: ISurfaceNote[];
 }
-const props = defineProps(["data"])
+const props = defineProps(["data", "clearData"])
 let gridArr = reactive<gridArrItem[]>([
   {
     id: 1,
@@ -55,6 +55,12 @@ const toDetail = (nid: string) => {
 watch(() => props.data, (n) => {
   if(n.length > 0) {
     pushToArrByImgHeight(toRaw(n))
+  }
+})
+
+watch(() => props.clearData, () => {
+  for(let i = 0; i < gridArr.length; i++) {
+    gridArr[i].data = [];
   }
 })
 </script>

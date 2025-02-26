@@ -15,9 +15,9 @@ const routes:any[] = [
                 }
             },
             {
-                path: "video",
-                name: "Video",
-                component: () => import ('../components/video/video.vue'),
+                path: "topic",
+                name: "Topic",
+                component: () => import ('../components/topic/topic.vue'),
                 meta: {
                     keepAlive: false
                 }
@@ -46,7 +46,10 @@ const routes:any[] = [
                     keepAlive: true
                 }
             },
-        ]
+        ],
+        meta: {
+            keepAlive: true
+        }
     },
     {
         path: "/updateProfile",

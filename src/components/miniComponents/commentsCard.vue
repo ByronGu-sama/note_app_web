@@ -6,7 +6,7 @@ import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
 import {ElMessage} from "element-plus";
 
-const props = defineProps(["avatarUrl", "username", "content", "likes_count", "publishedAt", "root_id", "nid", "parent_id"]);
+const props = defineProps(["avatarUrl", "username", "content", "likes_count", "publishedAt", "root_id", "nid", "cid", "parent_id"]);
 let comment = ref<ISendNoteContentModel>({
   nid: "",
   content: "",
@@ -42,6 +42,7 @@ const getSubComments = () => {
     }
   })
 }
+
 // 发送二级评论
 const replyComment = (parent_name:string) => {
   comment.value.nid = props.nid
@@ -65,6 +66,18 @@ const replyComment = (parent_name:string) => {
   })
 }
 
+// 点赞评论
+const thumbsUp = (cid:string) => {
+  if(cid === "") {
+    return
+  }
+  axios.get(`${requestList.LIKE_NOTE_COMMENT}/${cid}`).then(() => {
+
+  }).catch(() => {
+    ElMessage.warning("点赞失败")
+  })
+}
+
 onBeforeMount(() => {
   getSubComments();
 })
@@ -79,7 +92,7 @@ onBeforeMount(() => {
         <span class="comment-card-username">{{ props.username }}</span>
       </div>
       <div class="comment-card-userInfo-right">
-        <img src="../../assets/icons/thumbsUp.png" alt="点赞">
+        <img src="../../assets/icons/thumbsUp.png" alt="" @click="thumbsUp(props.cid)">
         <span>{{props.likes_count}}</span>
       </div>
     </div>
@@ -103,7 +116,7 @@ onBeforeMount(() => {
          <span class="comment-card-subContent-username">{{ item.username }}</span>
        </div>
        <div class="comment-card-subContent-userInfo-right">
-         <img src="../../assets/icons/thumbsUp.png" alt="点赞">
+         <img src="../../assets/icons/thumbsUp.png" alt="点赞" @click="thumbsUp(props.cid)">
          <span>{{item.likes_count}}</span>
        </div>
      </div>
