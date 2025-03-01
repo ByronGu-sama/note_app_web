@@ -19,11 +19,28 @@ export const useUserStore = defineStore('user', () => {
         followers: 0,
         likes: 0,
         noteCount: 0,
-    })
+    });
+    const follows = ref<IUserInfo[]>([]);
+    const followers = ref<IUserInfo[]>([]);
+
     const getUserInfo = () => {
         clearUserInfo()
         axios.get(userInfoRequest.GET_USER_INFO).then((res) => {
             userInfo.value = {...res.data.data}
+        })
+    }
+
+    const getUserFollows = () => {
+        follows.value = [];
+        axios.get(userInfoRequest.GET_USER_FOLLOWS).then((res) => {
+            follows.value = res.data.data
+        })
+    }
+
+    const getUserFollowers = () => {
+        followers.value = [];
+        axios.get(userInfoRequest.GET_USER_FOLLOWERS).then((res) => {
+            followers.value = res.data.data
         })
     }
 
@@ -47,7 +64,11 @@ export const useUserStore = defineStore('user', () => {
 
     return {
         userInfo,
+        follows,
+        followers,
         getUserInfo,
         clearUserInfo,
+        getUserFollows,
+        getUserFollowers
     }
 })

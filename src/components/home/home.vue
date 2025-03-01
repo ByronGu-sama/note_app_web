@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import router from "../../router";
 import Waterfall from "../miniComponents/waterfall.vue";
 import requestList from "../../requestAPI/requestList.ts";
@@ -10,7 +10,7 @@ let canScroll = ref(true);
 let noteList = ref([]);
 let onLoading = ref(false);
 let page = 1;
-let limit = 10;
+let limit = 1;
 
 const toSearchPage = () => {
   router.push("/searchResult");
@@ -28,9 +28,6 @@ function getMoreNotes() {
     onLoading.value = false;
   })
 }
-// onMounted(() => {
-//   getMoreNotes();
-// })
 </script>
 
 <template>
@@ -45,7 +42,7 @@ function getMoreNotes() {
          v-infinite-scroll="getMoreNotes"
          :infinite-scroll-immediate="true"
          :infinite-scroll-disabled="!canScroll"
-         :infinite-scroll-distance="100"
+         :infinite-scroll-distance="400"
          :infinite-scroll-delay="800">
       <waterfall :data="noteList"></waterfall>
     </div>

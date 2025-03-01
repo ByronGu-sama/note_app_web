@@ -18,7 +18,7 @@ let uploadRef = ref<any>(null);
 
 // 获取用户笔记
 let page = 1;
-let pageSize = 24;
+let pageSize = 1;
 let onLoading = ref(false);
 let noMoreNotesMark = ref(false);
 let result = ref<ISurfaceNote[]>([]);
@@ -75,6 +75,14 @@ const getRawBlob = async (blob: any) => {
   uploadRef.value.clearFiles()
 }
 
+const toFollows = () => {
+  router.push("/follows");
+}
+
+const toFollowers = () => {
+  router.push("/followers");
+}
+
 // 关闭截图器
 const closeCropper = () => {
   showCropper.value = false;
@@ -117,12 +125,12 @@ const closeCropper = () => {
           <span>{{userStore.userInfo?.signature ? userStore.userInfo.signature:""}}</span>
         </div>
         <div class="profile-user-relation">
-          <div>
+          <div @click="toFollows">
             <span class="profile-user-relation-title">关注</span>
             <br>
             <span class="profile-user-relation-body">{{userStore.userInfo?.follows ? userStore.userInfo.follows:0}}</span>
           </div>
-          <div>
+          <div @click="toFollowers">
             <span class="profile-user-relation-title">被关注</span>
             <br>
             <span class="profile-user-relation-body">{{userStore.userInfo?.followers ? userStore.userInfo.followers:0}}</span>

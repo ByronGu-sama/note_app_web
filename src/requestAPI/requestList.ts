@@ -1,4 +1,7 @@
 export default {
+    // 连接ws服务
+    CONNECT_WS: 'ws://localhost:8081/message/init',
+
     // 登陆
     LOGIN: "/auth/login",
     // 注册
@@ -11,6 +14,10 @@ export default {
     GET_USER_INFO: "/userInfo",
     // 更新用户信息
     UPDATE_USER_INFO: "/userInfo/update",
+    // 获取用户关注列表
+    GET_USER_FOLLOWS: "/userInfo/follows",
+    // 获取用户粉丝列表
+    GET_USER_FOLLOWERS: "/userInfo/followers",
     // post 创建笔记
     NEW_NOTE: "/note",
     // post 获取笔记详情
@@ -49,4 +56,6 @@ export default {
     UPDATE_PROFILE_BANNER: "/style/updateProfileBanner",
     // 获取主题
     GET_STYLE: "/style",
+    // 获取WS连接
+    GET_WS_CONNECTION: "/message/init",
 }

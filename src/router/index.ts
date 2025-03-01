@@ -60,6 +60,22 @@ const routes:any[] = [
         },
     },
     {
+        path: "/follows",
+        name: "Follows",
+        component: () => import('../components/profile/follow.vue'),
+        meta: {
+            keepAlive: false
+        },
+    },
+    {
+        path: "/followers",
+        name: "Followers",
+        component: () => import('../components/profile/follower.vue'),
+        meta: {
+            keepAlive: false
+        },
+    },
+    {
         path: "/appSetting",
         name: "AppSetting",
         component: () => import('../components/profile/appSetting.vue'),

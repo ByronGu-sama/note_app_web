@@ -83,6 +83,7 @@ body {
 .profile-user-relation > div {
     text-align: center;
     overflow: hidden;
+    cursor: pointer;
 }
 .profile-user-relation-title {
     font-size: 13px;

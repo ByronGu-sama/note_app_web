@@ -11,6 +11,8 @@ if (token == null || token == "") {
   router.push("/startup")
 } else {
   userStore.getUserInfo()
+  userStore.getUserFollows()
+  userStore.getUserFollowers()
   styleStore.getStyle()
 }
 </script>
