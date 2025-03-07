@@ -155,6 +155,11 @@ const initNoteDetail = () => {
   getNoteComment()
 }
 
+// 分割话题
+const splitTags = (tags:string) => {
+  return tags.split(",")
+}
+
 onMounted(() => {
   initNoteDetail()
 })
@@ -235,6 +240,7 @@ onMounted(() => {
             </div>
             <div class="note-detail-right-bottom-detail-area-content">
               <span>{{noteDetail.content}}</span>
+              <a v-for="i in splitTags(noteDetail.tags)">#{{i}}<br></a>
             </div>
             <div class="note-detail-right-bottom-detail-area-time">
               <span>{{timeTools.formatTime(noteDetail.createdAt)}}</span>
@@ -395,6 +401,10 @@ body {
   font-size: 16px;
   box-sizing: border-box;
   padding: 5px 7px 5px 7px;
+}
+.note-detail-right-bottom-detail-area-content > a {
+  cursor: pointer;
+  color: #003153;
 }
 .note-detail-right-bottom-detail-area-time {
   font-size: 12px;

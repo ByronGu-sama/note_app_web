@@ -11,6 +11,7 @@ interface message {
   from_name: string,
   from_avatar: string,
   to_id: number,
+  to_name: string,
   type: number,
   content: string,
   mediaType: number,
@@ -26,6 +27,7 @@ let inputMsg = ref<message>({
   from_name: "",
   from_avatar: "",
   to_id: 0,
+  to_name: "",
   type: 1,
   content: "",
   mediaType: 1,
@@ -44,33 +46,35 @@ const sendMessage = () => {
   }
   if(curWebsocket !== null && curWebsocket.readyState == WebSocket.OPEN) {
     const curTime = new Date(new Date().getTime() + 8 * 3600 * 1000);
-    inputMsg.value.to_id = Number(messageStore.curMsgTarget.uid);
+    inputMsg.value.to_id = Number(messageStore.curMsgTarget.to_id === userStore.userInfo.uid?messageStore.curMsgTarget.from_id:messageStore.curMsgTarget.to_id);
+    inputMsg.value.to_name = String(messageStore.curMsgTarget.to_name === userStore.userInfo.username?messageStore.curMsgTarget.from_name:messageStore.curMsgTarget.to_name);
     inputMsg.value.pub_time = curTime.toISOString();
-    inputMsg.value.from_id = userStore.userInfo.uid!;
-    inputMsg.value.from_name = userStore.userInfo.username!;
-    inputMsg.value.from_avatar = userStore.userInfo.avatarUrl!;
-
-    console.log(inputMsg.value);
+    inputMsg.value.from_id =Number(userStore.userInfo.uid);
+    inputMsg.value.from_name = String(userStore.userInfo.username);
+    inputMsg.value.from_avatar = String(userStore.userInfo.avatarUrl);
     curWebsocket.send(JSON.stringify(inputMsg.value));
     let temp = {...inputMsg.value};
-    messageStore.pushMsgToList(messageStore.curMsgTarget.uid, messageStore.curMsgTarget.username, temp)
+    console.log("toid" + inputMsg.value.to_id);
+    console.log("fromid" + inputMsg.value.from_id);
+
+    messageStore.pushMsgToList(inputMsg.value.from_id, inputMsg.value.from_name, inputMsg.value.to_id, inputMsg.value.to_name, temp);
     inputMsg.value.content = "";
   } else {
-    ElMessage.warning("客户端未连接")
+    ElMessage.warning("客户端未连接");
   }
 }
 
 const messageListener = (e:any) => {
   let msg:message = JSON.parse(e.data);
-  messageStore.pushMsgToList(msg.from_id, msg.from_name, msg)
+  messageStore.pushMsgToList(msg.from_id, msg.from_name, msg.to_id, msg.to_name, msg)
   nextTick(() => {
     msgScrollbar.value.setScrollTop(msgWrap.value.clientHeight);
   })
 }
 
-const changeMsgTarget = (uid:number, targetName:string) => {
-  messageStore.curMsgTarget.uid = uid;
-  messageStore.curMsgTarget.username = targetName;
+const changeMsgTarget = (fromId:number, fromName:string, toId:number, toName:string) => {
+  messageStore.updateMsgTarget(fromId, fromName, toId, toName);
+  console.log(fromId, toId, fromName, toName);
 }
 
 // 页面刷新前关闭ws连接
@@ -81,11 +85,10 @@ window.addEventListener("beforeunload", () => {
 });
 
 watch(() => messageStore.curMsgTarget, (n) => {
-  if(n.uid === 0) {
+  if(n.mid === "") {
     return
   }
-  messageStore.curMsgTarget = n;
-  messageStore.pushMsgToList(messageStore.curMsgTarget.uid, messageStore.curMsgTarget.username, null);
+  messageStore.createNewDialog(n.from_id, n.from_name, n.to_id, n.to_name);
 }, {
   immediate: true,
   deep: true,
@@ -118,39 +121,46 @@ onMounted(() => {
 <div class="message">
   <div class="message-left">
     <div>
-      <div class="message-list-item" v-for="(v, k) in messageStore.msgList" :key="k" @click="changeMsgTarget(k, v[0])">
-        <span>{{v[0]}}</span>
+      <div class="message-list-item" v-for="(v, k) in messageStore.msgList" :key="k" @click="changeMsgTarget(v[0], v[1], v[2], v[3])">
+        <span v-if="userStore.userInfo.uid === v[0]">{{v[3]}}</span>
+        <span v-if="userStore.userInfo.uid === v[2]">{{v[1]}}</span>
       </div>
     </div>
   </div>
   <div class="message-right">
     <div class="message-right-top">
-      <span class="message-right-top-title">{{messageStore.curMsgTarget.username === undefined? '' :messageStore.curMsgTarget.username}}</span>
+      <span class="message-right-top-title" v-if="userStore.userInfo.username === messageStore.curMsgTarget.to_name">{{messageStore.curMsgTarget.from_name}}</span>
+      <span class="message-right-top-title" v-if="userStore.userInfo.username === messageStore.curMsgTarget.from_name">{{messageStore.curMsgTarget.to_name}}</span>
     </div>
-    <div class="message-right-bottom" v-if="messageStore.msgList[messageStore.curMsgTarget.uid]">
+    <div class="message-right-bottom" v-if="messageStore.msgList[messageStore.curMsgTarget.mid]">
       <el-scrollbar height="508px" ref="msgScrollbar">
         <div class="message-list-wrap" ref="msgWrap">
+
           <transition-group name="message-list" tag="message">
-            <div v-for="(item,index) in messageStore.msgList[messageStore.curMsgTarget.uid][1]" :key="index" class="message-item">
+            <div v-for="(item,index) in messageStore.msgList[messageStore.curMsgTarget.mid][4]" :key="index" class="message-item">
+
               <div class="message-item-left" v-if="item.from_id !== userStore.userInfo.uid">
                 <el-avatar :src="item.from_avatar" alt="user"/>
                 <div class="message-area">
                   <span>{{item.content}}</span>
                 </div>
               </div>
+
               <div class="message-item-right" v-if="item.from_id === userStore.userInfo.uid">
                 <div class="message-area">
                   <span>{{item.content}}</span>
                 </div>
                 <el-avatar :src="item.from_avatar" alt="user"/>
               </div>
+
             </div>
           </transition-group>
+
         </div>
       </el-scrollbar>
     </div>
     <div class="message-comment-area">
-      <el-input v-model="inputMsg.content">
+      <el-input v-model="inputMsg.content" :disabled="messageStore.curMsgTarget.mid === ''">
         <template #append>
           <el-button :icon="Position" @click="sendMessage"/>
         </template>

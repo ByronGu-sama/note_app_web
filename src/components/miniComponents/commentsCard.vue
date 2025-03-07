@@ -7,6 +7,8 @@ import requestList from "../../requestAPI/requestList.ts";
 import {ElMessage} from "element-plus";
 
 const props = defineProps(["avatarUrl", "username", "content", "likes_count", "publishedAt", "root_id", "nid", "cid", "parent_id"]);
+const likeIcon = '../../assets/icons/like.png';
+const likedIcon = '../../assets/icons/liked.png';
 let comment = ref<ISendNoteContentModel>({
   nid: "",
   content: "",
@@ -92,7 +94,7 @@ onBeforeMount(() => {
         <span class="comment-card-username">{{ props.username }}</span>
       </div>
       <div class="comment-card-userInfo-right">
-        <img src="../../assets/icons/thumbsUp.png" alt="" @click="thumbsUp(props.cid)">
+        <img src="../../assets/icons/like.png" alt="" @click="thumbsUp(props.cid)">
         <span>{{props.likes_count}}</span>
       </div>
     </div>
@@ -116,7 +118,7 @@ onBeforeMount(() => {
          <span class="comment-card-subContent-username">{{ item.username }}</span>
        </div>
        <div class="comment-card-subContent-userInfo-right">
-         <img src="../../assets/icons/thumbsUp.png" alt="点赞" @click="thumbsUp(props.cid)">
+         <img src="../../assets/icons/like.png" alt="点赞" @click="thumbsUp(props.cid); ">
          <span>{{item.likes_count}}</span>
        </div>
      </div>

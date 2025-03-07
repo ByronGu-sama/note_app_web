@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {ISurfaceNote} from "../../models/surfaceNoteModel.ts";
-import {reactive, toRaw, watch} from "vue";
+import {reactive, ref, toRaw, watch} from "vue";
 import NoteCard from "./noteCard.vue";
 import router from "../../router";
 
@@ -32,6 +32,7 @@ let gridArr = reactive<gridArrItem[]>([
     data: []
   }
 ]);
+let curScrollHeight = ref(0); //记录当前的滚动位置
 
 // 将笔记推送至瀑布流队列
 const pushToArrByImgHeight = (notesArr:ISurfaceNote[]) => {

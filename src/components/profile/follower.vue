@@ -6,8 +6,8 @@ import router from "../../router";
 const userStore = useUserStore();
 const messageStore = useMessageStore();
 
-const chat = (uid:number, username:string) => {
-  messageStore.updateMsgTarget(uid, username);
+const chat = (toId:number, toName:string) => {
+  messageStore.updateMsgTarget(Number(userStore.userInfo.uid), String(userStore.userInfo.username), toId, toName);
   router.push(`/message`);
 }
 
