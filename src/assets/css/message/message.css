@@ -2,6 +2,9 @@ body {
     margin: 0;
     padding: 0;
 }
+::-webkit-scrollbar {
+    display: none;
+}
 .message-list-enter-active, .message-list-leave-active {
     transition: all 0.2s linear;
 }
@@ -44,6 +47,7 @@ body {
 .message-list-wrap {
     width: 100%;
     height: auto;
+    padding-bottom: 240px;
 }
 .message-list-item {
     height: 40px;

@@ -29,7 +29,9 @@ const noteDetail = ref<INoteDetailModel>({
   uid: 0,
   updatedAt: "",
   username: "",
-  viewsCount: 0
+  viewsCount: 0,
+  liked: false,
+  collected: false,
 }); // 笔记详情
 const noteCommentsList = ref<INoteCommentModel[]>([]); // 评论列表
 let comment = ref<ISendNoteContentModel>({nid:"", content:"", root_id:""}); // 待发送的评论
@@ -48,6 +50,7 @@ const closeCard = () => {
 
 // 关注/取关
 const subscribe = () => {
+
 }
 
 // 发送一级评论
@@ -100,7 +103,9 @@ const getNoteDetail = () => {
     uid: 0,
     updatedAt: "",
     username: "",
-    viewsCount: 0
+    viewsCount: 0,
+    liked: false,
+    collected : false
   }
   axios.get(`${requestList.GET_NOTE_DETAIL}/${currentNid}`).then((res) => {
     noteDetail.value = res.data.data;
@@ -158,6 +163,29 @@ const initNoteDetail = () => {
 // 分割话题
 const splitTags = (tags:string) => {
   return tags.split(",")
+}
+
+const shareNote = () => {
+  navigator.clipboard.writeText(window.location.href);
+  ElMessage.success("已复制链接，快去分享吧～")
+}
+
+const collectNote = (nid:string) => {
+  if(!noteDetail.value.collected) {
+    axios.get(`${requestList.COLLECT_NOTE}/${nid}`)
+  } else {
+    axios.get(`${requestList.CANCEL_COLLECT_NOTE}/${nid}`)
+  }
+  noteDetail.value.collected = !noteDetail.value.collected
+}
+
+const likeNote = (nid:string) => {
+  if(!noteDetail.value.liked) {
+    axios.get(`${requestList.LIKE_NOTE}/${nid}`)
+  } else {
+    axios.get(`${requestList.DISLIKE_NOTE}/${nid}`)
+  }
+  noteDetail.value.liked = !noteDetail.value.liked
 }
 
 onMounted(() => {
@@ -246,6 +274,13 @@ onMounted(() => {
               <span>{{timeTools.formatTime(noteDetail.createdAt)}}</span>
             </div>
           </div>
+          <div class="note-detail-right-bottom-detail-area-panel">
+            <img src="../../assets/icons/share.png" alt="" @click="shareNote()"/>
+            <img v-if="!noteDetail.collected" src="../../assets/icons/collect1.png" alt="" @click="collectNote(noteDetail.nid)"/>
+            <img v-else src="../../assets/icons/collect2.png" alt="" @click="collectNote(noteDetail.nid)"/>
+            <img v-if="!noteDetail.liked" src="../../assets/icons/like1.png" alt="" @click="likeNote(noteDetail.nid)"/>
+            <img v-else src="../../assets/icons/like2.png" alt="" @click="likeNote(noteDetail.nid)"/>
+          </div>
         </div>
 
         <div class="note-detail-right-middle-area">
@@ -293,7 +328,8 @@ body {
 }
 .note-detail {
   width: 900px;
-  height: 590px;
+  height: 650px;
+  display: flex;
   overflow: hidden;
   background-color: white;
 }
@@ -308,9 +344,6 @@ body {
 .note-detail-exit-icon > img {
   width: 30px;
   height: 30px;
-}
-.note-detail {
-  display: flex;
 }
 .note-detail-left {
   flex: 65%;
@@ -328,6 +361,7 @@ body {
   box-sizing: border-box;
 }
 .note-detail-right {
+  position: relative;
   flex: 35%;
   height: 590px;
   overflow-y: auto;
@@ -410,6 +444,26 @@ body {
   font-size: 12px;
   text-indent: 8px;
   color: #242424;
+}
+.note-detail-right-bottom-detail-area-panel {
+  background-color: #f4f4f4;
+  border-radius: 20px;
+  width: 120px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 6px;
+}
+.note-detail-right-bottom-detail-area-panel img{
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  transition: 0.1s linear;
+}
+.note-detail-right-bottom-detail-area-panel img:hover {
+  width: 28px;
+  height: 28px;
 }
 .note-detail-right-bottom-comments-area {
   width: 100%;

@@ -94,7 +94,7 @@ onBeforeMount(() => {
         <span class="comment-card-username">{{ props.username }}</span>
       </div>
       <div class="comment-card-userInfo-right">
-        <img src="../../assets/icons/like.png" alt="" @click="thumbsUp(props.cid)">
+        <img src="../../assets/icons/like1.png" alt="" @click="thumbsUp(props.cid)">
         <span>{{props.likes_count}}</span>
       </div>
     </div>
@@ -118,7 +118,7 @@ onBeforeMount(() => {
          <span class="comment-card-subContent-username">{{ item.username }}</span>
        </div>
        <div class="comment-card-subContent-userInfo-right">
-         <img src="../../assets/icons/like.png" alt="点赞" @click="thumbsUp(props.cid); ">
+         <img src="../../assets/icons/like1.png" alt="点赞" @click="thumbsUp(props.cid); ">
          <span>{{item.likes_count}}</span>
        </div>
      </div>

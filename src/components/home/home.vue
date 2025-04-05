@@ -10,7 +10,7 @@ let canScroll = ref(true);
 let noteList = ref([]);
 let onLoading = ref(false);
 let page = 1;
-let limit = 1;
+let limit = 20;
 
 const toSearchPage = () => {
   router.push("/searchResult");

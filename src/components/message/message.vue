@@ -54,11 +54,11 @@ const sendMessage = () => {
     inputMsg.value.from_avatar = String(userStore.userInfo.avatarUrl);
     curWebsocket.send(JSON.stringify(inputMsg.value));
     let temp = {...inputMsg.value};
-    console.log("toid" + inputMsg.value.to_id);
-    console.log("fromid" + inputMsg.value.from_id);
-
     messageStore.pushMsgToList(inputMsg.value.from_id, inputMsg.value.from_name, inputMsg.value.to_id, inputMsg.value.to_name, temp);
     inputMsg.value.content = "";
+    nextTick(() => {
+      msgScrollbar.value.setScrollTop(msgWrap.value.clientHeight);
+    })
   } else {
     ElMessage.warning("客户端未连接");
   }
@@ -68,13 +68,14 @@ const messageListener = (e:any) => {
   let msg:message = JSON.parse(e.data);
   messageStore.pushMsgToList(msg.from_id, msg.from_name, msg.to_id, msg.to_name, msg)
   nextTick(() => {
-    msgScrollbar.value.setScrollTop(msgWrap.value.clientHeight);
+    setTimeout(() => {
+      msgScrollbar.value.setScrollTop(msgWrap.value.clientHeight);
+    },150)
   })
 }
 
 const changeMsgTarget = (fromId:number, fromName:string, toId:number, toName:string) => {
   messageStore.updateMsgTarget(fromId, fromName, toId, toName);
-  console.log(fromId, toId, fromName, toName);
 }
 
 // 页面刷新前关闭ws连接

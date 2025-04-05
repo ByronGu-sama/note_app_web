@@ -35,7 +35,7 @@ const openNoteCard = () => {
       <div class="note-card-content-author">
         <img :src="props.avatarUrl" alt="" class="note-card-author-avatar"/>
         <span class="note-card-content-authorName">{{props.username}}</span>
-        <img src="/src/assets/icons/like.png" class="note-card-like-icon" alt=""/>
+        <img src="/src/assets/icons/like1.png" class="note-card-like-icon" alt=""/>
         <span class="note-card-likes">{{convertToShortNumber(props.likes_count)}}</span>
       </div>
     </div>

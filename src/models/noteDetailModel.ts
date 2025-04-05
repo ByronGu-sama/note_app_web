@@ -16,4 +16,6 @@ export interface INoteDetailModel {
     collectionsCount:number;
     sharesCount:number;
     viewsCount:number;
+    liked: boolean;
+    collected: boolean;
 }
