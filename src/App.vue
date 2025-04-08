@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import router from "./router";
+import {useUserStore} from "./store/userStore.ts";
 
+const userStore = useUserStore();
 const cachedPage = ref<string[]>(["main"]);
 
 router.beforeEach((to, from, next) => {
@@ -21,6 +23,10 @@ router.beforeEach((to, from, next) => {
   }
   next();
 });
+// 初始化时家在当前用户的信息
+onMounted(() => {
+  userStore.getUserInfo()
+})
 </script>
 
 <template>

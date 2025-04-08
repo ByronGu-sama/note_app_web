@@ -5,6 +5,7 @@ import router from "../../router";
 import Waterfall from "../miniComponents/waterfall.vue";
 import requestList from "../../requestAPI/requestList.ts";
 import axios from "axios";
+import {ElMessage} from "element-plus";
 
 let canScroll = ref(true);
 let noteList = ref([]);
@@ -22,7 +23,10 @@ function getMoreNotes() {
   axios.get(`${requestList.NOTE_LIST}?page=${page}&limit=${limit}`).then(res => {
     noteList.value = res.data.data;
     page++
-  }).catch(() => {
+  }).catch((err) => {
+    if(err.status == 503) {
+      ElMessage.warning("请勿频繁获取数据");
+    }
     canScroll.value = false;
   }).finally(() => {
     onLoading.value = false;

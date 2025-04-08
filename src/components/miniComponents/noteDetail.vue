@@ -299,9 +299,11 @@ onMounted(() => {
                 :likes_count="i.likes_count"
                 :published-at="i.created_at"
                 :root_id="i.root_id"
+                :from_id="i.uid"
                 :nid="i.nid"
                 :cid="i.cid"
-                :parent_id="i.cid">
+                :parent_id="i.cid"
+                :liked="i.liked">
             </comments-card>
           </div>
         </div>
@@ -361,6 +363,7 @@ body {
   box-sizing: border-box;
 }
 .note-detail-right {
+  padding-top: 30px;
   position: relative;
   flex: 35%;
   height: 590px;

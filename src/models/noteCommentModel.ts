@@ -11,4 +11,5 @@ export interface INoteCommentModel {
     root_id:string;
     likes_count:number;
     children:INoteCommentModel[];
+    liked:boolean;
 }

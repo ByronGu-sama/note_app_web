@@ -1,27 +1,43 @@
 <script setup lang="ts">
 import timeTools from "../../tools/timeTools.ts";
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, onDeactivated, ref, watch} from "vue";
 import type {ISendNoteContentModel} from "../../models/sendNoteContentModel.ts";
 import axios from "axios";
 import requestList from "../../requestAPI/requestList.ts";
 import {ElMessage} from "element-plus";
+import {useUserStore} from "../../store/userStore.ts";
 
-const props = defineProps(["avatarUrl", "username", "content", "likes_count", "publishedAt", "root_id", "nid", "cid", "parent_id"]);
-const likeIcon = '../../assets/icons/like.png';
-const likedIcon = '../../assets/icons/liked.png';
+const userStore = useUserStore();
+const props = defineProps(["avatarUrl", "username", "content", "from_id","likes_count", "publishedAt", "root_id", "nid", "cid", "parent_id", "liked"]);
 let comment = ref<ISendNoteContentModel>({
   nid: "",
   content: "",
   root_id: "",
   parent_id: "",
-})
+});
 let showMainReplyArea = ref(false); // 展示主评论的回复区域
 let showSubReplyAreaIndex = ref(0); // 展示子评论的回复区域
-
-const limit = 5; //分页限制
 let page = 1; // 页数
+let limit = 5; //分页限制
 let noCommentMark = ref(false); // 是否已无法获取评论
-let children = ref<any[]>([])
+let children = ref<any[]>([]);
+let timer:any = null; // 处理鼠标长按事件的定时器
+let pressing = true; // 是否按下鼠标
+let showPanel = ref(false); // 是否显示删除评论的遮罩
+let data = ref<any>({
+  avatarUrl: props.avatarUrl,
+  username: props.username,
+  content: props.content,
+  from_id: props.from_id,
+  likes_count: props.likes_count,
+  publishedAt: props.publishedAt,
+  root_id: props.root_id,
+  nid: props.nid,
+  cid: props.cid,
+  parent_id: props.parent_id,
+  liked: props.liked,
+});
+let showComment = ref(true); // 是否展示当前评论
 
 // 获取子评论
 const getSubComments = () => {
@@ -69,44 +85,85 @@ const replyComment = (parent_name:string) => {
 }
 
 // 点赞评论
-const thumbsUp = (cid:string) => {
+const thumbsUp = (liked:boolean, cid:string) => {
   if(cid === "") {
     return
   }
-  axios.get(`${requestList.LIKE_NOTE_COMMENT}/${cid}`).then(() => {
-
-  }).catch(() => {
-    ElMessage.warning("点赞失败")
-  })
+  if(!liked){
+    axios.get(`${requestList.LIKE_NOTE_COMMENT}/${cid}`)
+  } else {
+    axios.get(`${requestList.DISLIKE_NOTE_COMMENT}/${cid}`)
+  }
 }
+
+const listenPress = (from_id:number) => {
+  if(userStore.userInfo.uid != from_id) {
+    return;
+  }
+  pressing = true;
+  timer = setInterval(() => {
+    if(pressing) {
+      showPanel.value = true;
+    }
+  }, 600)
+}
+
+const listenUnPress = () => {
+  pressing = false
+  clearInterval(timer)
+}
+
+// 删除评论
+const delComment = (from_id:number, cid:string) => {
+  if(from_id == 0 || from_id == undefined || cid == "" || cid == undefined || userStore.userInfo.uid != from_id) {
+    return;
+  }
+  axios.delete(`${requestList.DEl_NOTE_COMMENT}/${cid}`)
+  showComment.value = false
+}
+
+watch(() => props, () => {
+  data.value = {...props};
+}, {
+  immediate: true,
+  deep: true
+})
 
 onBeforeMount(() => {
   getSubComments();
 })
+onDeactivated(() => {
+  clearInterval(timer)
+})
 </script>
 
 <template>
-<div class="comment-card">
-  <div class="comment-card-mainContent">
+<div class="comment-card" v-if="showComment">
+  <div class="comment-card-mainContent" @mousedown="listenPress(data.from_id)" @mouseup="listenUnPress()">
+    <div class="comment-card-panel-mask" v-if="showPanel">
+      <button class="cancelDelCommentBtn" @click="showPanel = false">取消</button>
+      <button class="delCommentBtn" @click="delComment(data.from_id, data.cid)">删除</button>
+    </div>
     <div class="comment-card-userInfo">
       <div class="comment-card-userInfo-left">
-        <el-avatar :src="props.avatarUrl" style="position: absolute;left: 5px;top: 5px;cursor: pointer"/>
-        <span class="comment-card-username">{{ props.username }}</span>
+        <el-avatar :src="data.avatarUrl" style="position: absolute;left: 5px;top: 5px;cursor: pointer"/>
+        <span class="comment-card-username">{{ data.username }}</span>
       </div>
       <div class="comment-card-userInfo-right">
-        <img src="../../assets/icons/like1.png" alt="" @click="thumbsUp(props.cid)">
-        <span>{{props.likes_count}}</span>
+        <img src="../../assets/icons/like1.png" alt="" v-if="!data.liked" @click="thumbsUp(data.liked, data.cid); data.likes_count++;data.liked = true">
+        <img src="../../assets/icons/like2.png" alt="" v-else @click="thumbsUp(data.liked, data.cid); data.likes_count--; data.liked = false">
+        <span>{{data.likes_count}}</span>
       </div>
     </div>
     <div class="comment-card-comment">
-      <span @click="showMainReplyArea = !showMainReplyArea">{{props.content}}</span>
+      <span @click="showMainReplyArea = !showMainReplyArea">{{data.content}}</span>
     </div>
     <div class="comment-card-reply-area" v-if="showMainReplyArea">
       <el-input :autosize="{minRows: 1, maxRows: 3}" resize="none" type="textarea" v-model="comment.content" class="comment-card-reply-area-input"/>
-      <button @click="replyComment(props.username)" class="comment-card-reply-area-btn">回复</button>
+      <button @click="replyComment(data.username)" class="comment-card-reply-area-btn">回复</button>
     </div>
     <div class="comment-card-bottom">
-      <span>{{timeTools.formatTime(props.publishedAt)}}</span>
+      <span>{{timeTools.formatTime(data.publishedAt)}}</span>
     </div>
   </div>
  <div class="comment-card-subContent" v-if="children.length > 0">
@@ -118,7 +175,8 @@ onBeforeMount(() => {
          <span class="comment-card-subContent-username">{{ item.username }}</span>
        </div>
        <div class="comment-card-subContent-userInfo-right">
-         <img src="../../assets/icons/like1.png" alt="点赞" @click="thumbsUp(props.cid); ">
+         <img src="../../assets/icons/like1.png" alt="" v-if="!item.liked" @click="thumbsUp(item.liked, item.cid); item.likes_count++; item.liked = true">
+         <img src="../../assets/icons/like2.png" alt="" v-else @click="thumbsUp(item.liked, item.cid); item.likes_count--; item.liked = false">
          <span>{{item.likes_count}}</span>
        </div>
      </div>
@@ -162,6 +220,36 @@ body {
 .comment-card-mainContent {
   width: 100%;
   height: auto;
+  position: relative;
+}
+.comment-card-panel-mask {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.delCommentBtn, .cancelDelCommentBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  font-size: 14px;
+  margin: 0 15px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+.cancelDelCommentBtn {
+  background-color: rgb(99, 200, 86);
+}
+.delCommentBtn {
+  background-color: rgb(237, 106, 94);
 }
 .comment-card-userInfo-left {
   width: calc(100% - 50px);
